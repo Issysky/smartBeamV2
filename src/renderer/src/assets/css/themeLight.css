@@ -1,0 +1,14 @@
+:root {
+     /* 应用背景颜色 */
+  --BgColor: #f3f3f3;
+  /* 左侧边栏背景颜色 */
+  --LeftNavBgColor: linear-gradient(180deg, rgba(0, 51, 153, 1) 0%, rgba(0, 255, 238, 0.3) 100%);
+  /* 中间内容区背景颜色 */
+  --MainContentBgColor: #fff;
+  /* 顶部栏字体颜色 */
+  --HeaderFontColor: #000;
+  /* 左侧边栏字体颜色 */
+  --LeftNavFontColor: #fff;
+  /* 中间内容区背景颜色 */
+  --MainContentFontColor: #000;
+}

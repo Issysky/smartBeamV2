@@ -1,0 +1,79 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 4430133 */
+  src: url('iconfont.woff2?t=1706780881987') format('woff2'),
+       url('iconfont.woff?t=1706780881987') format('woff'),
+       url('iconfont.ttf?t=1706780881987') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-pedstal:before {
+  content: "\e610";
+}
+
+.icon-ai__knowledge:before {
+  content: "\e611";
+}
+
+.icon-ai__production:before {
+  content: "\e612";
+}
+
+.icon-steam:before {
+  content: "\e602";
+}
+
+.icon-spreder:before {
+  content: "\e603";
+}
+
+.icon-gas:before {
+  content: "\e604";
+}
+
+.icon-monitor:before {
+  content: "\e605";
+}
+
+.icon-mix_station:before {
+  content: "\e606";
+}
+
+.icon-led:before {
+  content: "\e608";
+}
+
+.icon-bridge_progress:before {
+  content: "\e609";
+}
+
+.icon-beam_progress:before {
+  content: "\e60a";
+}
+
+.icon-company_name:before {
+  content: "\e60b";
+}
+
+.icon-lot:before {
+  content: "\e60c";
+}
+
+.icon-address:before {
+  content: "\e60d";
+}
+
+.icon-torpedo:before {
+  content: "\e60e";
+}
+
+.icon-template:before {
+  content: "\e60f";
+}
+
