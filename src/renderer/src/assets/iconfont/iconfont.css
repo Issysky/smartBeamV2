@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4430133 */
-  src: url('iconfont.woff2?t=1706780881987') format('woff2'),
-       url('iconfont.woff?t=1706780881987') format('woff'),
-       url('iconfont.ttf?t=1706780881987') format('truetype');
+  src: url('iconfont.woff2?t=1709176986663') format('woff2'),
+       url('iconfont.woff?t=1709176986663') format('woff'),
+       url('iconfont.ttf?t=1709176986663') format('truetype');
 }
 
 .iconfont {
@@ -13,16 +13,52 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-pedstal:before {
-  content: "\e610";
+.icon-production__beam:before {
+  content: "\e618";
+}
+
+.icon-production__tunnel_plan:before {
+  content: "\e61a";
+}
+
+.icon-production__beam_plan:before {
+  content: "\e61b";
 }
 
 .icon-ai__knowledge:before {
-  content: "\e611";
+  content: "\e616";
 }
 
 .icon-ai__production:before {
+  content: "\e617";
+}
+
+.icon-send:before {
+  content: "\e619";
+}
+
+.icon-production__water_electric:before {
+  content: "\e611";
+}
+
+.icon-labour__history:before {
   content: "\e612";
+}
+
+.icon-labour__actual:before {
+  content: "\e613";
+}
+
+.icon-security__ai_camera:before {
+  content: "\e614";
+}
+
+.icon-labour__basic:before {
+  content: "\e615";
+}
+
+.icon-pedstal:before {
+  content: "\e610";
 }
 
 .icon-steam:before {

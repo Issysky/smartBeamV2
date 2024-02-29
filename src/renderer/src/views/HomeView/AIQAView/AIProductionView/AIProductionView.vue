@@ -13,18 +13,25 @@
           <div class="send-res">{{ message.content }}</div>
         </div>
       </div>
-      <!-- 提示词 -->
-      <div class="tipsWrapper" v-if="store.messageArr.length == 0">
-        <div
-          class="tips"
-          v-for="button in buttons"
-          :key="button.text"
-          @click="sendMessage('user', button.text)"
-        >
-          <p class="label">{{ button.label }}</p>
-          <p class="text">{{ button.text }}</p>
+      <div class="start-show-wrapper" v-if="store.messageArr.length == 0">
+        <div class="logo-wrapper">
+          <div class="logo"><img src="@renderer/assets/img/logo/logo5.png" alt="" /></div>
+          <p>有什么可以帮助您?</p>
+        </div>
+        <!-- 提示词 -->
+        <div class="tipsWrapper">
+          <div
+            class="tips"
+            v-for="button in buttons"
+            :key="button.text"
+            @click="sendMessage('user', button.text)"
+          >
+            <p class="label">{{ button.label }}</p>
+            <p class="text">{{ button.text }}</p>
+          </div>
         </div>
       </div>
+
       <!-- 输入框 -->
       <div class="input-container">
         <div class="input" ref="input">
@@ -69,10 +76,10 @@ const nameArr = ref([...homeViewText.nameArr])
 
 // 定义buttons数组
 const buttons = ref([
-  { type: 'info', text: homeViewText.buttonArr[0].text,label:homeViewText.buttonArr[0].label },
-  { type: 'info', text: homeViewText.buttonArr[1].text,label:homeViewText.buttonArr[1].label },
-  { type: 'info', text: homeViewText.buttonArr[2].text,label:homeViewText.buttonArr[2].label },
-  { type: 'info', text: homeViewText.buttonArr[3].text,label:homeViewText.buttonArr[3].label }
+  { type: 'info', text: homeViewText.buttonArr[0].text, label: homeViewText.buttonArr[0].label },
+  { type: 'info', text: homeViewText.buttonArr[1].text, label: homeViewText.buttonArr[1].label },
+  { type: 'info', text: homeViewText.buttonArr[2].text, label: homeViewText.buttonArr[2].label },
+  { type: 'info', text: homeViewText.buttonArr[3].text, label: homeViewText.buttonArr[3].label }
 ])
 
 const footerInfo = ref('@艾环梦工程科技')
@@ -104,7 +111,7 @@ const sendMessage = (role, msg) => {
   }
 }
 
-onMounted(()=>{
+onMounted(() => {
   store.resetMessage()
   store.changePrompt('model1')
 })
@@ -176,48 +183,77 @@ onMounted(()=>{
       }
     }
 
-    .tipsWrapper {
-      width: 50%;
-      height: auto;
+    .start-show-wrapper {
+      width: 100%;
+      height: 80%;
       display: flex;
-      flex-wrap: wrap;
-      padding-top: 28%;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      .tips {
-        width: 45%;
-        height: 60px;
+      .logo-wrapper {
+        width: 50%;
+        height:80%;
         display: flex;
         flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        .logo {
+          width: 100px;
+          height: 100px;
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+          }
+        }
+        p {
+          font-size: 28px;
+          font-weight: 600;
+          color: var(--font-level-13);
+        }
+      }
+      .tipsWrapper {
+        width: 50%;
+        height: auto;
+        display: flex;
+        flex-wrap: wrap;
         justify-content: center;
         align-items: center;
-        cursor: pointer;
-        border-radius: 15px;
-        border: 1px solid #33333388;
-        margin-bottom: 15px;
-        margin-right: 20px;
-        color: var(--font-level-4);
-        background-color: var(--color-info);
-        &:hover {
-          background-color: rgba(168, 172, 169, 0.5);
+        .tips {
+          width: 45%;
+          height: 60px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          border-radius: 15px;
+          border: 1px solid #33333388;
+          margin-bottom: 15px;
+          margin-right: 20px;
+          color: var(--font-level-4);
+          background-color: var(--color-info);
+          &:hover {
+            background-color: rgba(168, 172, 169, 0.5);
+            .label {
+              color: var(--font-level-13);
+            }
+            .text {
+              color: var(--font-level-9);
+            }
+          }
           .label {
-            color: var(--font-level-13);
+            width: 80%;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--font-level-1);
           }
           .text {
-            color: var(--font-level-9);
+            width: 80%;
+            font-size: 12px;
+            text-align: left;
+            color: var(--font-level-5);
           }
-        }
-        .label{
-          width: 80%;
-          font-size: 20px;
-          font-weight: 600;
-          color: var(--font-level-1);
-        }
-        .text{
-          width: 80%;
-          font-size: 12px;
-          text-align: left;
-          color: var(--font-level-5);
         }
       }
     }
@@ -238,7 +274,7 @@ onMounted(()=>{
         border: 2px solid #00000029;
         position: relative;
         background-color: #fff;
-        
+
         .wait {
           width: 100%;
           height: 100%;
@@ -267,21 +303,25 @@ onMounted(()=>{
           height: 30px;
           position: absolute;
           bottom: 10px;
-          right: 3px;
+          right: 8px;
           font-size: 25px;
           font-weight: 800;
           display: flex;
           justify-content: center;
           align-items: center;
           cursor: pointer;
-          background-color: #33333322;
+          background-color: var(--color-success-hover);
           border: none;
           border-radius: 5px;
           color: var(--font-level-1);
-
         }
         .active {
-          background-color: #000;
+          background-color: var(--color-success);
+          transition: all 0.2s;
+          &:hover {
+            transform: scale(1.05);
+            font-size: 26px;
+          }
         }
       }
     }

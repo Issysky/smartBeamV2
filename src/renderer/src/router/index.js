@@ -75,11 +75,11 @@ const router = createRouter({
               name: 'equip__mix_station',
               component: () => import('../views/HomeView/EquipView/EquipMixView/EquipMixView.vue')
             },
-            // {
-            //   path:'equip__gas',
-            //   name:'equip__gas',
-            //   component: () => import('../views/thirdViews/EquipGasView.vue')
-            // },
+            {
+              path:'equip__gas',
+              name:'equip__gas',
+              component: () => import('../views/HomeView/EquipView/EquipGasView/EquipGasView.vue')
+            },
             {
               path: 'locked',
               name: 'locked',

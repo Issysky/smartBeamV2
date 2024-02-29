@@ -151,31 +151,7 @@ export const useSecurityStore = defineStore('security', () => {
       })
   }
 
-  //获取option的value
-  // const getChartOtion = () => {
-  //   let excess = {
-  //     zero: 0,
-  //     one: 0,
-  //     two: 0,
-  //     three: 0
-  //   }
-  //   mixData.data.forEach((item, index) => {
-  //     if (item.ExcessGrade === 0) {
-  //       excess.zero++
-  //     } else if (item.ExcessGrade === 1) {
-  //       excess.one++
-  //     } else if (item.ExcessGrade === 2) {
-  //       excess.two++
-  //     } else if (item.ExcessGrade === 3) {
-  //       excess.three++
-  //     }
-  //   })
-  //   // 超标等级饼状图option
-  //   excessGradeOption.option.series[0].data[0].value = excess.zero
-  //   excessGradeOption.option.series[0].data[1].value = excess.one
-  //   excessGradeOption.option.series[0].data[2].value = excess.two
-  //   excessGradeOption.option.series[0].data[3].value = excess.three
-  // }
+
 
   // 渲染图表
   const chartSetOption = (chart, option) => {
