@@ -26,7 +26,7 @@ const props = defineProps({
   padding-left: 30px;
   p {
     width: 120px;
-    font-size: 1em;
+    font-size: 20px;
     font-weight: bold;
     margin: 0;
     margin-bottom: 10px;

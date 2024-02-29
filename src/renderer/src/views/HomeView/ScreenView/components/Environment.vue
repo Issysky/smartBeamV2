@@ -81,7 +81,7 @@ onMounted(async () => {
         top: 5%;
         left: 50%;
         transform: translateX(-50%);
-        font-size: 1em;
+        font-size: 20px;
       }
     }
     .chart-noise {
@@ -94,7 +94,7 @@ onMounted(async () => {
         top: 5%;
         left: 50%;
         transform: translateX(-50%);
-        font-size: 1em;
+        font-size: 20px;
       }
     }
   }
@@ -106,7 +106,7 @@ onMounted(async () => {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    font-size: 0.8em;
+    font-size: 16px;
     color: var(--font-level-2);
     .data {
       width: 24%;
@@ -117,12 +117,12 @@ onMounted(async () => {
       border-radius: 20px;
       p {
         margin: 0;
-        font-size: 0.9em;
+        font-size: 18px;
         color: var(--font-level-11);
       }
       .iconfont {
         margin-right: 2%;
-        font-size: 1.2em;
+        font-size: 24px;
         color: var(--font-level-11);
       }
     }

@@ -45,7 +45,7 @@ onMounted(() => {
   // background-color: #181818;
   transition: var(--screen-card-transition);
   p {
-    font-size: 2em;
+    font-size: 40px;
     font-weight: bold;
     color: var(--screen-font-color);
     text-align: center;

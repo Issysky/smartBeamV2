@@ -1,6 +1,6 @@
 <!-- 主要内容页面 -->
 <template>
-  <div class="main-wrapper">
+  <div class="main-wrapper" >
     <slot></slot>
   </div>
 </template>
@@ -16,6 +16,6 @@
   border-radius: 15px;
   // box-shadow: 7px 7px 15px #000000;
   transition: all 0.3s linear;
-  margin-right: 2vw;
+  margin-right: 20px;
 }
 </style>

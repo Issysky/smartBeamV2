@@ -66,7 +66,7 @@ onMounted(() => {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  font-size: 0.7em;
+  font-size: 14px;
   .label {
     width: 30%;
     height: 100%;

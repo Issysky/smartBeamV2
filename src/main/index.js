@@ -3,14 +3,18 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import dns from 'dns'
+import { spawn } from 'child_process' 
+import path from 'path'
+
 
 let mainWindow
+spawn('python', ['./main.py'])
 
 function createWindow() {
   // 创建浏览器窗口。
   mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 800,
+    width: 400,
+    height: 420,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
@@ -18,7 +22,8 @@ function createWindow() {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
       contextIsolation: true, // 启用上下文隔离
-      nodeIntegration: true
+      nodeIntegration: true,
+      webSecurity: false
     },
     // 禁止自定义缩放窗口
     resizable: false,
@@ -32,7 +37,7 @@ function createWindow() {
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
     // 默认打开开发者工具
-    mainWindow.webContents.openDevTools()
+    // mainWindow.webContents.openDevTools()
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -101,6 +106,11 @@ app.whenReady().then(() => {
   ipcMain.on('open-external-link', (event, url) => {
     shell.openExternal(url)
   })
+  // 获取mp4路径
+  ipcMain.handle('getVideoPath', (event,fileName) => {
+    const mp4Path = path.join(app.getAppPath(), 'resources', 'video',`${fileName}.mp4`);
+    return mp4Path
+})
 
   createWindow()
 

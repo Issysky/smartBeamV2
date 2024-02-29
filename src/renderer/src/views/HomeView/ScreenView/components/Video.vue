@@ -13,7 +13,7 @@
 
 <script setup lang="js">
 import { onMounted, ref } from 'vue'
-import { useSettingScreenMenuStore } from '@renderer/stores/homeStore/setScreenMenuStore/settingScreenMenu.js'
+import { useSettingScreenMenuStore } from '@renderer/stores/homeStore/settingMenuStore/settingScreenMenu.js'
 
 const videoPlayer = ref(null)
 
@@ -72,7 +72,7 @@ onMounted(() => {
       }
       .custom-file-upload {
         display: inline-block;
-        font-size: 0.6em;
+        font-size: 12px;
         background-color: #4caf50;
         color: white;
         cursor: pointer;

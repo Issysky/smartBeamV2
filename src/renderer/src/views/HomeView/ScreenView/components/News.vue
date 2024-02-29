@@ -113,7 +113,7 @@ onUnmounted(() => {
       }
       .label {
         width: 100%;
-        font-size: 0.7em;
+        font-size: 14px;
         font-weight: 600;
         display: flex;
         color: var(--font-level-2);
@@ -128,14 +128,14 @@ onUnmounted(() => {
         }
         .time {
           width: 25%;
-          font-size: 0.6em;
+          font-size: 12px;
           margin-top: 5px;
           line-height: 2;
         }
       }
       .content {
         width: 70%;
-        font-size: 0.5em;
+        font-size: 10px;
         .memo {
           display: -webkit-box;
           -webkit-line-clamp: 1;

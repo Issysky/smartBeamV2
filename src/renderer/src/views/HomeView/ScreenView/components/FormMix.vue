@@ -101,7 +101,7 @@ onMounted(() => {
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: .7em;
+      font-size: 14px;
       font-weight: 600;
     }
   }
@@ -120,7 +120,7 @@ onMounted(() => {
       color: var(--font-level-3);
       border-radius: 10px;
       div {
-        font-size: 0.6em;
+        font-size: 12px;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;

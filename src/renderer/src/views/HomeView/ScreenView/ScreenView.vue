@@ -21,7 +21,6 @@
 
 <script setup lang="js">
 import { onMounted, ref } from 'vue'
-import { usetopBarStore } from '@renderer/stores/homeStore/topBarStore/topBar.js'
 import Overview from './components/Overview.vue'
 import Video from './components/Video.vue'
 import Environment from './components/Environment.vue'
@@ -32,21 +31,6 @@ import MixStation from './components/MixStation.vue'
 import BorderLineTitle from './components/BorderLineTitle.vue'
 import productionLine from './components/ProductionLine.vue'
 
-const topBarStore = usetopBarStore()
-const isMax = ref(true)
-// 全屏按钮点击事件
-const fullScreen = () => {
-  // 顶部栏的显示与隐藏
-  const topBar = document.querySelector('.top-bar')
-  const mainWrapper = document.querySelector('.main-wrapper')
-  topBar.style.display = isMax.value ? 'none' : 'flex'
-  mainWrapper.style.height = isMax.value ? 'auto' : '89vh'
-  mainWrapper.style.marginRight = isMax.value ? '1vw' : '2vw'
-  mainWrapper.style.marginLeft = isMax.value ? '-1vw' : '0'
-  mainWrapper.style.borderRadius = isMax.value ? '0' : '15px'
-  isMax.value = !isMax.value
-}
-
 onMounted(() => {})
 </script>
 <style scoped lang="less">
@@ -54,14 +38,11 @@ onMounted(() => {})
   width: 100%;
   height: 100%;
   position: relative;
-  // border-radius: 20px;
-  // background-color: #3867a100;
 
   .beam-screen-wrapper {
     width: 100%;
     height: 100%;
     position: relative;
-    // border-radius: 20px;
     .label {
       .title{
         width: 100%;
@@ -69,7 +50,6 @@ onMounted(() => {})
         top: 0;
         left: 0;
         border-radius: 15px;
-        // background-color: #bfc;
       }
       .fullscreen {
         position: absolute;

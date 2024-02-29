@@ -3,16 +3,17 @@ import { RouterLink, RouterView } from 'vue-router'
 import { onMounted, onBeforeUnmount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-const src1 = ref('/src/assets/logo/logo1.png')
-const src2 = ref('@renderer/assets/logo/logo2.png')
-const src3 = ref('./assets/img/logo/logo3.png')
 
 const router = useRouter()
+
+onMounted(async () => {
+
+})
 </script>
 
 <template>
   <main>
-    <h1>appvue</h1>
+
     <RouterView />
   </main>
 </template>

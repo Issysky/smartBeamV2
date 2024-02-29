@@ -55,7 +55,7 @@ import { onMounted, ref } from 'vue'
 import { usetopBarStore } from '@renderer/stores/homeStore/topBarStore/topBar.js'
 import { useUserStore } from '@renderer/stores/loginStore/user.js'
 import { useRouter,useRoute } from 'vue-router'
-import {useSettingScreenMenuStore} from '@renderer/stores/homeStore/setScreenMenuStore/settingScreenMenu.js'
+import {useSettingScreenMenuStore} from '@renderer/stores/homeStore/settingMenuStore/settingScreenMenu.js'
 
 const router = useRouter()
 const route = useRoute()
@@ -76,9 +76,6 @@ const drag1 = ref(null)
 // 定义是否联网
 const online = ref(localStorage.getItem('online') === 'online' ? true : false)
 
-// 获取大字体文件元素和小字体文件元素，文件在index.html中引入
-const smallFs = document.querySelector('#smallFs')
-const largeFs = document.querySelector('#largeFs')
 
 // 改变顶部导航栏的激活状态
 const changeActive = (index, router_name) => {
@@ -113,12 +110,11 @@ const showLeftBar = () => {
   // 获取左侧边栏元素和主要内容区域元素
   const leftBar = document.querySelector('.leftBar-wrapper')
   const mainWrapper = document.querySelector('.main-wrapper')
-  leftBar.style.width = '12vw'
-  leftBar.style.marginLeft = '1vw'
-  // leftBar.style.visibility = 'visible'
+  leftBar.style.width = '12%'
+  leftBar.style.marginLeft = '1%'
   // 把主要内容区域设置为占据右侧
   mainWrapper.style.width = ''
-  mainWrapper.style.marginRight = '3vw'
+  mainWrapper.style.marginRight = '30px'
   mainWrapper.style.marginLeft = '20px'
 }
 const hideLeftBar = () => {
@@ -129,7 +125,7 @@ const hideLeftBar = () => {
     leftBar.style.width = '0'
     // 把主要内容区域设置为占满全屏
     mainWrapper.style.flex = '1'
-    mainWrapper.style.marginRight = '2vw'
+    mainWrapper.style.marginRight = '2%'
     mainWrapper.style.marginLeft = '0'
   }
 

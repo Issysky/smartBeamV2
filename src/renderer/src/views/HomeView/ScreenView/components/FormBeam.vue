@@ -110,7 +110,7 @@ onMounted(() => {
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 0.7em;
+      font-size: 14px;
       font-weight: 600;
     }
   }
@@ -132,7 +132,7 @@ onMounted(() => {
         white-space: nowrap;
         text-overflow: ellipsis;
         text-align: center;
-        font-size: 0.6em;
+        font-size: 12px;
       }
     }
   }

@@ -95,10 +95,10 @@ onMounted(() => {
       }
       p {
         margin: 0;
-        font-size: 0.7em;
+        font-size: 14px;
       }
       .iconfont {
-        font-size: 1em;
+        font-size: 20px;
         margin-left: 5%;
       }
       .label {
@@ -125,10 +125,10 @@ onMounted(() => {
         margin-left: 5%;
         p {
           margin: 0;
-          font-size: 0.7em;
+          font-size:14px;
         }
         .iconfont {
-          font-size: 1em;
+          font-size: 20px;
         }
         .label {
           width: auto;

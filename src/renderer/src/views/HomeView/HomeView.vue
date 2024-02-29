@@ -19,7 +19,7 @@
   </div>
 </template>
 
-<script setup lang="js">
+<script setup >
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import LeftBar from './components/LeftBar.vue'

@@ -1,8 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory,createWebHashHistory } from 'vue-router'
 // import { useUserStore } from '../stores/user'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(),
   routes: [
     // 打开应用跳转到登录页
     {
@@ -27,7 +27,7 @@ const router = createRouter({
           name: 'screen',
           component: () => import('../views/HomeView/ScreenView/ScreenView.vue')
         },
-        // // 数字孪生
+        // 数字孪生
         // {
         //   path: 'digital_twin',
         //   name: 'digital_twin',
@@ -45,147 +45,142 @@ const router = createRouter({
         //     }
         //   ]
         // },
-        // // 设备管理
-        // {
-        //   path: 'equip',
-        //   name: 'equip',
-        //   component: () => import('../views/secondViews/EquipView.vue'),
-        //   children: [
-        //     // 模板
-        //     {
-        //       path: 'equip__template',
-        //       name: 'equip__template',
-        //       component: () => import('../views/thirdViews/EquipTemplateView.vue')
-        //     },
-        //     // 蒸养棚
-        //     {
-        //       path: 'equip__steam',
-        //       name: 'equip__steam',
-        //       component: () => import('../views/thirdViews/EquipSteamView.vue')
-        //     },
-        //     // 监控
-        //     {
-        //       path: 'equip__monitor',
-        //       name: 'equip__monitor',
-        //       component: () => import('../views/thirdViews/EquipMonitorView.vue')
-        //     },
-        //     // 拌合站
-        //     {
-        //       path: 'equip__mix_station',
-        //       name: 'equip__mix_station',
-        //       component: () => import('../views/thirdViews/EquipMixView.vue')
-        //     },
-        //     {
-        //       path:'equip__gas',
-        //       name:'equip__gas',
-        //       component: () => import('../views/thirdViews/EquipGasView.vue')
-        //     },
-        //     {
-        //       path: 'locked',
-        //       name: 'locked',
-        //       component: () => import('../views/LockedView.vue')
-        //     }
-        //   ]
-        // },
-        // // 生产数据
-        // {
-        //   path: 'production',
-        //   name: '生产数据',
-        //   component: () => import('../views/secondViews/ProductionView.vue'),
-        //   children: [
-        //     {
-        //       path: 'production__beam',
-        //       name: '梁片数据',
-        //       component: () => import('../views/thirdViews/ProductionBeamView.vue')
-        //     },
-        //     {
-        //       path: 'production__beam_plan',
-        //       name: '梁片计划排程',
-        //       component: () => import('../views/thirdViews/ProductionPlanView.vue')
-        //     },
-        //     {
-        //       path: 'blank',
-        //       name: '空白页',
-        //       component: () => import('../views/thirdViews/BlankView.vue')
-        //     },
-        //     {
-        //       path: 'locked',
-        //       name: 'locked',
-        //       component: () => import('../views/LockedView.vue')
-        //     }
-        //   ]
-        // },
-        // // 安全
-        // {
-        //   path: 'security',
-        //   name: 'security',
-        //   component: () => import('../views/secondViews/SecurityView.vue'),
-        //   children: [
-        //     {
-        //       path: 'security__ai_camera',
-        //       name: 'security__ai_camera',
-        //       component: () => import('../views/thirdViews/SecurityCameraView.vue')
-        //     },
-        //     {
-        //       path: 'locked',
-        //       name: 'locked',
-        //       component: () => import('../views/LockedView.vue')
-        //     }
-        //   ]
-        // },
-        // // AI问答
-        // {
-        //   path: 'ai',
-        //   name: 'ai',
-        //   component: () => import('../views/secondViews/AIQAView.vue'),
-        //   children: [
-        //     {
-        //       path: 'ai__production',
-        //       name: 'ai__production',
-        //       component: () => import('../views/thirdViews/AIProductionView.vue')
-        //     },
-        //     {
-        //       path: 'ai__knowledge',
-        //       name: 'ai__knowledge',
-        //       component: () => import('../views/thirdViews/AIProductionView.vue')
-        //     },
-        //     {
-        //       path: 'locked',
-        //       name: 'locked',
-        //       component: () => import('../views/LockedView.vue')
-        //     }
-        //   ]
-        // },
-        // // 设置页面
-        // {
-        //   path: 'setting_menu',
-        //   name: 'setting_menu',
-        //   component: () => import('../views/secondViews/SettingMenuView.vue'),
-        //   children: [
-        //     {
-        //       path: 'set_base__screen',
-        //       name: 'set_base__screen',
-        //       component: () => import('../views/thirdViews/SetBaseScreenView.vue')
-        //     },
-        //     {
-        //       path: 'set_equip__template',
-        //       name: 'set_equip__template',
-        //       component: () => import('../views/thirdViews/SetEquipTemplateView.vue')
-        //     },
-        //     {
-        //       path:'set_equip__steam',
-        //       name:'set_equip__steam',
-        //       component: () => import('../views/thirdViews/SetEquipSteamView.vue')
-        //     }
-        //   ]
-        // }
+        // 设备管理
+        {
+          path: 'equip',
+          name: 'equip',
+          component: () => import('../views/HomeView/EquipView/EquipView.vue'),
+          children: [
+            // 模板
+            {
+              path: 'equip__template',
+              name: 'equip__template',
+              component: () => import('../views/HomeView/EquipView/EquipTemplateView/EquipTemplateView.vue')
+            },
+            // 蒸养棚
+            {
+              path: 'equip__steam',
+              name: 'equip__steam',
+              component: () => import('../views/HomeView/EquipView/EquipSteamView/EquipSteamView.vue')
+            },
+            // // 监控
+            // {
+            //   path: 'equip__monitor',
+            //   name: 'equip__monitor',
+            //   component: () => import('../views/thirdViews/EquipMonitorView.vue')
+            // },
+            // 拌合站
+            {
+              path: 'equip__mix_station',
+              name: 'equip__mix_station',
+              component: () => import('../views/HomeView/EquipView/EquipMixView/EquipMixView.vue')
+            },
+            // {
+            //   path:'equip__gas',
+            //   name:'equip__gas',
+            //   component: () => import('../views/thirdViews/EquipGasView.vue')
+            // },
+            {
+              path: 'locked',
+              name: 'locked',
+              component: () => import('../views/LockedView/LockedView.vue')
+            }
+          ]
+        },
+        // 生产数据
+        {
+          path: 'production',
+          name: '生产数据',
+          component: () => import('../views/HomeView/ProductionView/ProductionView.vue'),
+          children: [
+            {
+              path: 'production__beam',
+              name: '梁片数据',
+              component: () => import('../views/HomeView/ProductionView/ProductionBeamView/ProductionBeamView.vue')
+            },
+            {
+              path: 'production__beam_plan',
+              name: '梁片计划排程',
+              component: () => import('../views/HomeView/ProductionView/ProductionPlanView/ProductionPlanView.vue')
+            },
+            {
+              path: 'locked',
+              name: 'locked',
+              component: () => import('../views/LockedView/LockedView.vue')
+            }
+          ]
+        },
+        // 安全
+        {
+          path: 'security',
+          name: 'security',
+          component: () => import('../views/HomeView/SecurityView/SecurityView.vue'),
+          children: [
+            {
+              path: 'security__ai_camera',
+              name: 'security__ai_camera',
+              component: () => import('../views/HomeView/SecurityView/SecurityCameraView/SecurityCameraView.vue')
+            },
+            {
+              path: 'locked',
+              name: 'locked',
+              component: () => import('../views/LockedView/LockedView.vue')
+            }
+          ]
+        },
+        // AI问答
+        {
+          path: 'ai',
+          name: 'ai',
+          component: () => import('../views/HomeView/AIQAView/AIQAView.vue'),
+          children: [
+            {
+              path: 'ai__production',
+              name: 'ai__production',
+              component: () => import('../views/HomeView/AIQAView/AIProductionView/AIProductionView.vue')
+            },
+            {
+              path: 'ai__knowledge',
+              name: 'ai__knowledge',
+              component: () => import('../views/HomeView/AIQAView/AIEngineerView/AIEngineerView.vue')
+            },
+            {
+              path: 'locked',
+              name: 'locked',
+              component: () => import('../views/LockedView/LockedView.vue')
+            }
+          ]
+        },
+        // 设置页面
+        {
+          path: 'setting_menu',
+          name: 'setting_menu',
+          component: () => import('../views/HomeView/SettingMenuView/SettingMenuView.vue'),
+          children: [
+            {
+              path: 'set_base__screen',
+              name: 'set_base__screen',
+              component: () => import('../views/HomeView/SettingMenuView/SetBaseScreenView/SetBaseScreenView.vue')
+            },
+            {
+              path: 'set_equip__template',
+              name: 'set_equip__template',
+              component: () => import('../views/HomeView/SettingMenuView/SetEquipTemplateView/SetEquipTemplateView.vue')
+            },
+            {
+              path:'set_equip__steam',
+              name:'set_equip__steam',
+              component: () => import('../views/HomeView/SettingMenuView/SetEquipSteamView/SetEquipSteamView.vue')
+            }
+          ]
+        }
       ]
     },
-    // // 通配符路由，用于捕获所有未匹配的路由
-    // {
-    //   path: '/:pathMatch(.*)*',
-    //   redirect: '/home/equip/equip__template'
-    // }
+    // 通配符路由，用于捕获所有未匹配的路由
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/home/equip/equip__template'
+    }
   ]
 })
 // router.beforeEach((to, from, next) => {

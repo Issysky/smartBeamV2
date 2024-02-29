@@ -20,7 +20,9 @@ const topBar = {
     }),
   getMenu: () => ipcRenderer.send('show-context-menu'),
   // 打开外链
-  openExternal: (url) => ipcRenderer.send('open-external-link', url)
+  openExternal: (url) => ipcRenderer.send('open-external-link', url),
+  // 获取mp4路径
+  getVideoPath: (fileName) => ipcRenderer.invoke('getVideoPath', fileName),
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
