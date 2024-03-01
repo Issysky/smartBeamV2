@@ -40,8 +40,8 @@ import { useEquipSteamStore } from '@renderer/stores/homeStore/equipStore/equipS
 import { useSettingEquipSteamStore } from '@renderer/stores/homeStore/settingMenuStore/settingEquipSteam.js'
 import LabelType1 from '@renderer/components/LabelType1.vue'
 import Monitor from '@renderer/components/Monitor.vue'
-import { useMonitorStore } from '@renderer/stores/homeStore/equipStore/monitor.js'
 import CardSteam from './components/CardSteam.vue'
+import { useMonitorStore } from '@renderer/stores/homeStore/equipStore/monitor.js'
 
 //定义时间范围
 const timeRange = ref('')
