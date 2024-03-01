@@ -9,8 +9,12 @@ export const useEquipGasStore = defineStore('equipGas', () => {
   const url = '/device/harmful_gas/'
   // 报警信息请求地址
   const alarmUrl = '/device/harmful_gas_alert/'
-  // 图表数据
+  // 左上区域警报数据
   const gasData = reactive({
+    data: []
+  })
+  // 图表数据
+  const gasFormData = reactive({
     data: []
   })
   // echart图表option
@@ -81,10 +85,12 @@ export const useEquipGasStore = defineStore('equipGas', () => {
     { name: '污染值', width: '', key: 'value' }
   ]
   // 图表数据的key
-  const gasDataKey = ['name', 'area', 'time', 'is_handled', 'sensor_category', 'value']
+  const gasDataKey = ['name', 'area', 'time',  'sensor_category', 'value']
 
   // 导出excel的图表数据表头
-
+  const gasExcelColumns = [
+    "名称","地点","时间","事件","污染值"
+  ]
   // 获取区域数据
   const getGasData = async (name) => {
     const res = await axios.get(url, {
@@ -112,16 +118,23 @@ export const useEquipGasStore = defineStore('equipGas', () => {
     gasData.data = data
   }
   // 获取图表数据
-  const getFirstGasData = async (params) => {
-    const res = await axios.get(url, {
+  const getFormGasData = async (params) => {
+    console.log(1111)
+    const res = await axios.get(alarmUrl, {
       params: params,
       headers: {
         Authorization: localStorage.getItem('token')
       }
     })
-    const time_from = res.data[0].time
-    const time_to = res.data[res.data.length - 1].time
-    getGasAlarmData(chart, time_from, time_to)
+    totalPage.value = res.data.total_pages
+    gasFormData.data = res.data.results
+    gasFormData.data = res.data.results.map((item, index) => {
+      // 处理时间格式,加静态详情字段
+      return {
+        ...item,
+        time: item.time?.split('T')[0] + ' ' + item.time?.split('T')[1],
+      }
+    })
   }
   // 获取警报数据
   const getGasAlarmData = async (chart, time_from, time_to) => {
@@ -143,12 +156,10 @@ export const useEquipGasStore = defineStore('equipGas', () => {
   const getGasOption = async (chart, data) => {
     gasOption.series[0].data = data.seriesData
     gasOption.xAxis[0].data = data.xAxis
-    console.log(gasOption, 'gasoption')
     chartSetOption(chart, gasOption)
   }
   // 渲染图表
   const chartSetOption = (chart, option) => {
-    console.log(option)
     chart.setOption(option)
   }
   // 获取时间数组
@@ -171,7 +182,6 @@ export const useEquipGasStore = defineStore('equipGas', () => {
   // 统计报警数据
   const getAlarmDataByDate = (data, dateArr) => {
     // 统计每个日期的出现次数
-    console.log(dateArr, 'sdasds')
     const counts = data.reduce((acc, dateStr) => {
       // 确保日期格式为YYYY-MM-DD
       const date = dateStr.time.split('T')[0]
@@ -196,6 +206,20 @@ export const useEquipGasStore = defineStore('equipGas', () => {
     }
     return seriesData
   }
+  // 获取导出excel数据
+  const getExportExcelData = (data) => {
+    let excelData = []
+    excelData =  data.map((item) => {
+      return [item.name, item.area, item.time, item.sensor_category, item.value]
+    })
+    excelData.unshift(gasExcelColumns)
+    console.log(excelData, 'excelData')
+    return excelData
+  }
+  // 导出excel
+  const exportGasExcel = () => {
+    exportExcel('有害气体报警数据.xlsx', getExportExcelData(gasFormData.data))
+  }
 
   return {
     gasData,
@@ -204,9 +228,13 @@ export const useEquipGasStore = defineStore('equipGas', () => {
     totalPage,
     gasOption,
     gasDataKey,
+    gasFormData,
     getGasOption,
     generateTimeRange,
     getGasAlarmData,
-    chartSetOption
+    chartSetOption,
+    getFormGasData,
+    getExportExcelData,
+    exportGasExcel
   }
 })

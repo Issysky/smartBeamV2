@@ -150,8 +150,6 @@
         />
       </div>
     </div>
-    <!-- 详情弹窗 -->
-    <!-- <CardType3 /> -->
   </div>
 </template>
 
