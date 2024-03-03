@@ -85,7 +85,6 @@ export const useScreenStore = defineStore('screen', () => {
       return data
     }
     if (online) {
-      console.log('新闻在线')
       const res = await axios.get(newsUrl, {
         headers: { Authorization: localStorage.getItem('token') }
       })

@@ -63,12 +63,12 @@ const router = createRouter({
               name: 'equip__steam',
               component: () => import('../views/HomeView/EquipView/EquipSteamView/EquipSteamView.vue')
             },
-            // // 监控
-            // {
-            //   path: 'equip__monitor',
-            //   name: 'equip__monitor',
-            //   component: () => import('../views/thirdViews/EquipMonitorView.vue')
-            // },
+            // 监控
+            {
+              path: 'equip__monitor',
+              name: 'equip__monitor',
+              component: () => import('../views/HomeView/EquipView/EquipMonitorView/EquipMonitorView.vue')
+            },
             // 拌合站
             {
               path: 'equip__mix_station',

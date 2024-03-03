@@ -22,7 +22,6 @@ export const useOverviewStore = defineStore('overview', () => {
     getProjectInfoFromLocalStorage()
     // 在线情况
     if (online) {
-      console.log('overview在线',online)
       const res = await axios.get(infoUrl, {
         headers: { Authorization: localStorage.getItem('token') }
       })
@@ -49,7 +48,6 @@ export const useOverviewStore = defineStore('overview', () => {
     getProjectPlanFromLocalStorage()
     // 在线情况
     if (online) {
-      console.log('overview在线')
       const res = await axios.get(planUrl, {
         headers: { Authorization: localStorage.getItem('token') }
       })

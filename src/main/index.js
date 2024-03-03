@@ -5,10 +5,11 @@ import icon from '../../resources/icon.png?asset'
 import dns from 'dns'
 import { spawn } from 'child_process' 
 import path from 'path'
+import python_src from '../../resources/python/main.py?asset'
 
 
 let mainWindow
-spawn('python', ['./main.py'])
+spawn('python', [python_src])
 
 function createWindow() {
   // 创建浏览器窗口。

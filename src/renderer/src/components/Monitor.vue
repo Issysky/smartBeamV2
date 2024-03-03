@@ -1,9 +1,9 @@
 <!-- 监控弹窗组件 出现在蒸养棚 -->
 <template>
-  <div class="monitor-wrapper">
+  <div class="monitor-alert-wrapper">
     <div class="mask"></div>
     <div class="video">
-      <button class="close" @click="monitorStore.hideMonitor">关闭</button>
+      <button class="close" @click="monitorStore.hideMonitor()">关闭</button>
       <img :src="monitorStore.getImgurl()" alt="" />
     </div>
   </div>
@@ -25,13 +25,13 @@ onMounted(() => {
 })
 </script>
 <style scoped lang="less">
-.monitor-wrapper {
-  width: 100vw;
-  height: 100vh;
+.monitor-alert-wrapper {
+  width: 100%;
+  height: 100%;
   top: 0;
   left: 0;
   position: absolute;
-  z-index: 100;
+  z-index: 3;
   .mask {
     width: 100%;
     height: 100%;

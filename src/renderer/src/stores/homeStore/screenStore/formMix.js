@@ -52,7 +52,6 @@ export const useFormMixStore = defineStore('form', () => {
       console.log('拌合站离线状态')
       tableData.data = JSON.parse(localStorage.getItem('formMixData'))
     } else {
-      console.log('拌合站在线状态')
       const res = await axios.get(url, {
         headers: { Authorization: localStorage.getItem('token') }
       })

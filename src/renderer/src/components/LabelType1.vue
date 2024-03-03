@@ -53,6 +53,7 @@ onMounted(() => {
     }
     .eng {
       width: 0;
+      height: 20px;
       font-size: 0.8em;
       color: #33333366;
       overflow: hidden;

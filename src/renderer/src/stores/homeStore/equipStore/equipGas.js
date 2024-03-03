@@ -104,8 +104,8 @@ export const useEquipGasStore = defineStore('equipGas', () => {
     })
     const data = []
     for (let key in res.data[0]) {
-      if (key === 'co2') {
-        data.push({ name: '二氧化碳(CO2)', value: res.data[0][key] })
+      if (key === 'nh3') {
+        data.push({ name: '氨气(NH3)', value: res.data[0][key] })
       } else if (key === 'co') {
         data.push({ name: '一氧化碳(CO)', value: res.data[0][key] })
       } else if (key === 'ch4') {
@@ -119,7 +119,6 @@ export const useEquipGasStore = defineStore('equipGas', () => {
   }
   // 获取图表数据
   const getFormGasData = async (params) => {
-    console.log(1111)
     const res = await axios.get(alarmUrl, {
       params: params,
       headers: {

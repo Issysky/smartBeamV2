@@ -1,83 +1,24 @@
-<!-- 有害气体表格  出现在设备管理,有害气体页面-->
+<!-- 图表 生产数据  梁体数据-->
 <template>
-  <div class="form-gas-wrapper">
+  <!-- 表格外框 -->
+  <div class="table-mix-wrapper">
     <!-- 图表 -->
     <div class="table-wrapper">
       <!-- 表格顶部区域 -->
       <div class="top-wrapper">
         <!-- 过滤器 -->
-        <div class="filter">
-          <div class="time-select">
-            <el-date-picker
-              v-model="datePickerValue"
-              type="datetimerange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              format="YYYY/MM/DD hh:mm:ss"
-              value-format="YYYY-MM-DD hh:mm:ss "
-              @change="getParams('time', datePickerValue)"
-            />
-          </div>
-          <div class="input-wrapper">
-            <input
-              v-model="name"
-              type="text"
-              class="name"
-              placeholder=" 名称"
-              @blur="getParams('name', name)"
-            />
-          </div>
-          <div class="input-wrapper">
-            <input
-              v-model="area"
-              type="text"
-              class="area"
-              placeholder="  区域"
-              @blur="getParams('area', area)"
-            />
-          </div>
-          <div class="excess-select">
-            <!-- <span>超标等级</span> -->
-            <el-select
-              v-model="sensor_category"
-              class="m-2"
-              filterable
-              placeholder="事件类型"
-              style="width: 240px"
-              @change="getParams('sensor_category', sensor_category)"
-            >
-              <el-option
-                v-for="item in sensor_categoryArr"
-                :key="item.value"
-                :label="item.name"
-                :value="item.value"
-              />
-            </el-select>
-          </div>
-          <div class="btn-arr">
-            <button @click="getFormGasData('', '')">查询</button>
-            <button @click="resetParams()">重置</button>
-            <button @click="equipGasStore.exportGasExcel()">导出</button>
-          </div>
-        </div>
+        <div class="filter"></div>
       </div>
-      <!-- echarts图表 -->
-      <div class="echart-wrapper">
-        <div class="chart1">
-          <GasModel />
-        </div>
-        <div class="chart2">
-          <ChartGasAlert />
-        </div>
-      </div>
-      <!-- 图表区域 -->
       <!-- 表格主体 -->
       <div class="table">
         <div class="title-wrapper">
-          <div class="title" v-for="(item, index) in equipGasStore.gasColumns" :key="index">
+          <div
+            class="title"
+            v-for="(item, index) in productionBeamStore.beamDataColumns"
+            :key="index"
+          >
             <span> {{ item.name }}</span>
-            <span class="icon" @click="sortBy(item.key)">
+            <span class="icon" v-if="item.key !== 'detail'" @click="sortBy(item.key)">
               <el-icon :style="{ color: isSortShow.show === item.key ? '#409EFF' : '' }"
                 ><CaretTop
               /></el-icon>
@@ -90,82 +31,87 @@
         <div class="value-wrapper">
           <div
             class="value-column"
-            v-for="(item, index) in equipGasStore.gasFormData.data"
+            v-for="(item, index) in productionBeamStore.beamData.data"
             :key="index"
           >
-            <p class="value" v-for="(valueKey, i) in equipGasStore.gasDataKey" :key="index">
+            <p class="value" v-for="(valueKey, i) in productionBeamStore.beamDataKeys" :key="index">
               <!-- 实际方量加后缀 -->
-              {{ valueKey === 'sensor_category' ? item[valueKey] + '污染超标' : item[valueKey] }}
+              {{ item[valueKey] }}
+              <!-- 详情显示字体图标 -->
+              <el-icon
+                v-if="valueKey === 'detail'"
+                :style="{ cursor: 'pointer', fontSize: '1.5em' }"
+                ><Document
+              /></el-icon>
             </p>
           </div>
         </div>
       </div>
       <!-- 分页器 -->
-      <div class="pagination">
-        <el-pagination
-          background
-          layout="prev, pager, next"
-          v-model:current-page="currentPage"
-          @change="getFormGasData('page', currentPage)"
-          :total="equipGasStore.totalPage * 10"
-        />
-      </div>
+      <div class="pagination"></div>
     </div>
   </div>
 </template>
 
 <script setup lang="js">
-import { ref, onMounted, reactive } from 'vue'
-import GasModel from './GasModel.vue'
-import ChartGasAlert from './ChartGasAlert.vue'
-import { useEquipGasStore } from '@renderer/stores/homeStore/equipStore/equipGas.js'
-// 获取store
-const equipGasStore = useEquipGasStore()
+import { onMounted, reactive, ref } from 'vue'
+import { useProductionBeamStore } from '@renderer/stores/homeStore/productionStore/production_beam_data.js'
+
+// 引入store
+const productionBeamStore = useProductionBeamStore()
+
+// 当前页数
+const currentPage = ref(1)
+// 选择日期
+const datePickerValue = ref('')
+// 强度等级
+const strengthGrade = ref('')
+// 设备编号
+const mixStationCode = ref('')
+// 浇筑部位
+const pouringPosition = ref('')
+// 风险等级
+const excessGrade = ref('')
+// 任务工单号
+const taskId = ref('')
 // 定义传出的筛选数据
 let params = reactive({
   page_size: 10
 })
 
-const name = ref('')
-const area = ref('')
-const sensor_category = ref('')
-const currentPage = ref(1)
-
-const sensor_categoryArr = [
-  {
-    name: '一氧化碳超标',
-    value: 'co'
-  },
-  {
-    name: '氨气超标',
-    value: 'nh3'
-  },
-  {
-    name: '甲烷超标',
-    value: 'ch4'
-  },
-  {
-    name: '硫化氢超标',
-    value: 'h2s'
-  }
-]
-
 // 排序按钮是否显示
 const isSortShow = reactive({
-  show: ''
+  show: 'DischargeTime'
 })
+
+// 风险等级数组
+const excessGradeArr = [
+  { label: '不超标', value: 0 },
+  { label: '一级超标', value: 1 },
+  { label: '二级超标', value: 2 },
+  { label: '三级超标', value: 3 }
+]
+
 // 根据筛选获得参数
 const getParams = (key, value) => {
   if (key === 'time') {
     params.time_from = value[0]
     params.time_to = value[1]
-  } else if (key === 'name') {
-    params.name = value
-  } else if (key === 'area') {
-    params.area = value
-  } else if (key === 'sensor_category') {
-    params.sensor_category = value
+  } else if (key === 'strengthGrade') {
+    params.StrengthGrade = value
+  } else if (key === 'mixStationCode') {
+    params.MixStationCode = value
+  } else if (key === 'pouringPosition') {
+    params.PouringPosition = value
+  } else if (key === 'excessGrade') {
+    params.ExcessGrade = value
+  } else if (key === 'page') {
+    params.page = value
+  } else if (key === 'taskId') {
+    params.TaskId = value
   }
+
+  console.log(params)
 }
 // 重置筛选参数
 const resetParams = () => {
@@ -173,12 +119,16 @@ const resetParams = () => {
     page_size: 10,
     ordering: '-time'
   }
-  name.value = ''
-  area.value = ''
-  sensor_category.value = ''
-  getFormGasData('', '')
+  datePickerValue.value = ''
+  strengthGrade.value = ''
+  mixStationCode.value = ''
+  pouringPosition.value = ''
+  excessGrade.value = ''
+  taskId.value = ''
+  getMixStationData('', '')
 }
 
+// 排序
 const sortBy = (key) => {
   // 切换排序按钮显示
   if (isSortShow.show === key) {
@@ -187,34 +137,46 @@ const sortBy = (key) => {
     isSortShow.show = key
   }
   params.ordering = isSortShow.show
-  getFormGasData('', '')
+  getMixStationData('', '')
 }
 
 // 获取页面数据
-const getFormGasData = (type, value) => {
+const getMixStationData = (type, value) => {
   // 只有调用分页器的时候需要传入type和value
   if (type === 'page') {
     params.page = value
   }
-  equipGasStore.getFormGasData(params)
+  equipMixStore.getMixData(params)
+}
+// 获取超标图片
+const getExcessGradeImg = (value) => {
+  if (value === 0) {
+    return '/src/assets/img/screenImg/无.png'
+  } else if (value === 1) {
+    return '/src/assets/img/screenImg/数字1.png'
+  } else if (value === 2) {
+    return '/src/assets/img/screenImg/数字2.png'
+  } else if (value === 3) {
+    return '/src/assets/img/screenImg/数字3.png'
+  }
 }
 
 onMounted(() => {
-  // 获取有害气体表格数据
-  getFormGasData('', '')
+  productionBeamStore.getBeamData(params)
 })
 </script>
 <style scoped lang="less">
-.form-gas-wrapper {
-  width: 95%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.table-mix-wrapper {
+  width: 94%;
+  height: 87%;
+
+  padding: 0 3%;
+
   .table-wrapper {
     width: 100%;
     height: 100%;
     display: flex;
+    justify-content: center;
     flex-direction: column;
     align-items: center;
     .top-wrapper {
@@ -235,7 +197,7 @@ onMounted(() => {
         }
 
         .input-wrapper {
-          width: 12%;
+          width: 9%;
           height: 100%;
           display: flex;
           align-items: center;
@@ -284,24 +246,9 @@ onMounted(() => {
         }
       }
     }
-    .echart-wrapper {
-      width: 100%;
-      height: 35%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      .chart1 {
-        width: 35%;
-        height: 100%;
-      }
-      .chart2 {
-        flex: 1;
-        height: 100%;
-      }
-    }
     .table {
       width: 100%;
-      height: 45%;
+      height: 75%;
       .title-wrapper {
         width: 100%;
         height: 10%;
@@ -311,6 +258,17 @@ onMounted(() => {
         position: relative;
         margin-bottom: 1%;
         box-shadow: 5px 5px 10px #00000033;
+
+        // &::after {
+        //   content: '';
+        //   display: block;
+        //   width: 95%;
+        //   height: 1px;
+        //   background: black;
+        //   position: absolute;
+        //   bottom: -10px;
+        //   left: 2.5%;
+        // }
         .title {
           width: 20%;
           height: 100%;

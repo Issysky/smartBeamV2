@@ -149,7 +149,6 @@ export const useChartMonthStore = defineStore('chartMonth', () => {
     }
     getChartDataFromLocalStorage(myChart)
     if (online) {
-      console.log('chartMonth在线')
       const res = await axios.get(url, {
         params: {
           info_count: 15

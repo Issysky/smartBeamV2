@@ -7,14 +7,18 @@ export const useMonitorStore = defineStore('monitor', () => {
   // 请求地址
   const url = 'http://127.0.0.1:5000/video_feed?rtsp_stream_url='
   // rtsp地址
-  const rtsp_url = 'rtsp://admin:ly1029384756@192.168.31.100:554/h264/Streaming/Channels/1'
+  const rtsp_url = ref('')
   // 监控是否出现
   const isShow = ref(false)
 
   function getImgurl() {
-    return url + rtsp_url
+    return url + rtsp_url.value
   }
-  const showMonitor = () => {
+  const showMonitor = (monitorUrl) => {
+    if (monitorUrl) {
+      rtsp_url.value = monitorUrl
+      isShow.value = true
+    }
     isShow.value = true
   }
   const hideMonitor = () => {

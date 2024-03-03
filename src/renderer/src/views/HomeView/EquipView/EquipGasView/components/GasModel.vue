@@ -2,20 +2,6 @@
 <template>
   <div class="gas-model-wrapper">
     <div class="select-wrapper">
-      <!-- <el-select
-        v-model="area"
-        class="m-2"
-        placeholder="选择区域"
-        size="small"
-        @change="equipGasStore.getGasData(area)"
-      >
-        <el-option
-          v-for="item in areaArr"
-          :key="item.value"
-          :label="item.name"
-          :value="item.value"
-        />
-      </el-select> -->
       <div class="change-name">
         <button class="pre" @click="changeArea('pre')">上一区域</button>
         <p class="current-name">{{ areaArr.data[0].name }}</p>
@@ -158,6 +144,8 @@ onMounted(() => {
       background-color: var(--color-success);
       margin: 10px 20px;
       border-radius: 15px;
+      color: var(--font-level-1);
+
       .label {
         font-size: 1.4em;
         font-weight: bold;
@@ -168,6 +156,7 @@ onMounted(() => {
       }
     }
     .danger {
+      color: var(--font-level-13);
       animation: dangerColorChange 1s infinite;
     }
   }
