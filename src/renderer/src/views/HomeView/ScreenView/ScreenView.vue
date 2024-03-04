@@ -31,7 +31,6 @@ import MixStation from './components/MixStation.vue'
 import BorderLineTitle from './components/BorderLineTitle.vue'
 import productionLine from './components/ProductionLine.vue'
 
-onMounted(() => {})
 </script>
 <style scoped lang="less">
 .screen-wrapper {

@@ -14,8 +14,8 @@ let myChart
 const envStore = useEnvStore()
 
 onMounted(() => {
-  myChart = echarts.init(chart.value)
   setTimeout(() => {
+    myChart = echarts.init(chart.value)
     envStore.getEnvData(myChart, 'noise')
   }, 1700)
   window.addEventListener('resize', () => {

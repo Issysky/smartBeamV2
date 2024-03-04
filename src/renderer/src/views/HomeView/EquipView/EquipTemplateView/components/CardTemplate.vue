@@ -2,7 +2,7 @@
 <template>
   <div class="card-template-wrapper">
     <!-- 标题 -->
-    <p class="label">{{ '一号模板' }}</p>
+    <p class="label">{{ templateData.showName }}</p>
     <!-- 左侧区域 -->
     <div class="left-wrapper">
       <img class="template-img" :src="getImg()" alt="模板" />
@@ -166,9 +166,9 @@ const changeValve = async (index) => {
 // 获取图片展示
 const getImg = () => {
   if (1) {
-    return '/src/assets/img/equipImg/闲置中.png'
+    return '/src/assets/img/equipImg/模板.png'
   } else {
-    return '/src/assets/img/equipImg/养生中.png'
+    return '/src/assets/img/equipImg/模板.png'
   }
 }
 </script>

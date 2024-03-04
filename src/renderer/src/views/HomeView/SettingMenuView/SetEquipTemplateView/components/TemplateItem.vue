@@ -59,7 +59,7 @@
   // 删除设备
   const deleteEquip = (id) => {
     console.log(id, '删除的id')
-    settingEquiptemplateStore.deletetemplate(id)
+    settingEquiptemplateStore.deleteTemplate(id)
     // router.push({ path: '/home/setting_menu/set_equip__template' })
     // router.go(0)
   }
@@ -75,7 +75,7 @@
       is_monitor: is_monitor.value,
       id: props.templateItemData.id
     }
-    settingEquiptemplateStore.changetemplate(props.templateItemData.index, data)
+    settingEquiptemplateStore.changeTemplate(props.templateItemData.index, data)
   }
   
   // 初始化数据

@@ -113,12 +113,15 @@ onUnmounted(() => {
       }
       .label {
         width: 100%;
+        height: 20px;
         font-size: 14px;
         font-weight: 600;
         display: flex;
+        align-items: center;
         color: var(--font-level-2);
         .title {
           width: 65%;
+          height: 20px;
           display: -webkit-box;
           -webkit-line-clamp: 1;
           -webkit-box-orient: vertical;

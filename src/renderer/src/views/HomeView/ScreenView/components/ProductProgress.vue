@@ -1,4 +1,4 @@
-<!-- 工程进度 -->
+<!-- 制梁进度 -->
 <template>
   <div class="product-process-wrapper" :style="{ left: show ? '2%' : '-40%' }">
     <Line class="line" :width="'80%'" :label="'制梁进度'"></Line>
@@ -16,9 +16,8 @@ import ChartBeam from './ChartBeam.vue'
 let show = ref(false)
 onMounted(() => {
   setTimeout(() => {
-    
-  }, 100);
-  show.value = true
+    show.value = true
+  }, 100)
 })
 </script>
 <style scoped lang="less">

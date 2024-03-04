@@ -47,7 +47,7 @@ onMounted(() => {
   setTimeout(() => {
     myChart = echarts.init(chart.value)
     chartYearStore.getChartData(myChart, yearValue.value)
-  }, 500)
+  }, 1000)
 })
 </script>
 <style scoped lang="less">

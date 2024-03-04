@@ -16,19 +16,20 @@ export const useProductionBeamStore = defineStore('productionBeam', () => {
   const totalPage = ref(0)
   // 图表的表头
   const beamDataColumns = [
-    { name: '桥梁名称', width: '', key: 'bridge' },
-    { name: '梁片名称', width: '', key: 'name' },
-    { name: '梁号', width: '', key: 'beam_code' },
-    { name: '梁型', width: '', key: 'beam_type' },
-    { name: '状态', width: '', key: 'status' },
-    { name: '开始生产时间', width: '', key: 'start_time' },
-    { name: '结束生产时间', width: '', key: 'end_time' },
-    { name: '混凝土详情', width: '', key: 'detail' },
-    { name: '养生详情', width: '', key: 'detail' },
-    { name: '张拉详情', width: '', key: 'detail' },
-    { name: '压浆详情', width: '', key: 'detail' },
-    { name: '梁体评分', width: '', key: 'beam_grade' },
-    { name: '存放台座', width: '', key: 'storage_pedestal' }
+    { name: '桥梁名称', width: '120px', key: 'bridge' },
+    { name: '梁片名称', width: '120px', key: 'name' },
+    { name: '梁号', width: '120px', key: 'beam_code' },
+    { name: '梁型', width: '120px', key: 'beam_type' },
+    { name: '状态', width: '120px', key: 'status' },
+    { name: '开始生产时间', width: '160px', key: 'start_time' },
+    { name: '结束生产时间', width: '160px', key: 'end_time' },
+    { name: '时间详情', width: '80px', key: 'detail' },
+    { name: '混凝土详情', width: '80px', key: 'detail' },
+    { name: '养生详情', width: '80px', key: 'detail' },
+    { name: '张拉详情', width: '80px', key: 'detail' },
+    { name: '压浆详情', width: '80px', key: 'detail' },
+    { name: '梁体评分', width: '80px', key: 'beam_grade' },
+    { name: '存放台座', width: '80px', key: 'storage_pedestal' }
   ]
   //   图表数据的key
   const beamDataKeys = [
@@ -39,6 +40,7 @@ export const useProductionBeamStore = defineStore('productionBeam', () => {
     'status',
     'start_time',
     'end_time',
+    'detail',
     'detail',
     'detail',
     'detail',

@@ -69,6 +69,7 @@
         <div class="title-wrapper">
           <div
             class="title"
+            :style="{ width: item.width }"
             v-for="(item, index) in productionBeamStore.beamDataColumns"
             :key="index"
           >
@@ -89,7 +90,7 @@
             v-for="(item, index) in productionBeamStore.beamData.data"
             :key="index"
           >
-            <p class="value" v-for="(valueKey, i) in productionBeamStore.beamDataKeys" :key="index">
+            <p class="value" :style="{width:productionBeamStore.beamDataColumns[i].width}" v-for="(valueKey, i) in productionBeamStore.beamDataKeys" :key="index">
               <!-- 实际方量加后缀 -->
               {{ valueKey === 'status' ? getStatus(item[valueKey]) : item[valueKey] }}
               <!-- 详情显示字体图标 -->
@@ -315,17 +316,8 @@ onMounted(() => {
         position: relative;
         margin-bottom: 1%;
         box-shadow: 5px 5px 10px #00000033;
+        justify-content: center;
 
-        // &::after {
-        //   content: '';
-        //   display: block;
-        //   width: 95%;
-        //   height: 1px;
-        //   background: black;
-        //   position: absolute;
-        //   bottom: -10px;
-        //   left: 2.5%;
-        // }
         .title {
           width: 20%;
           height: 100%;

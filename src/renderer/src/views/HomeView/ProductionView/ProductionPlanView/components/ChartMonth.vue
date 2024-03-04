@@ -38,9 +38,8 @@ onMounted(() => {
   month = date.getMonth() + 1
   setTimeout(() => {
     myChart = echarts.init(chart.value)
-
     chartMonthStore.getChartData(myChart, 'product')
-  }, 500)
+  }, 1000)
 })
 </script>
 <style scoped lang="less">
