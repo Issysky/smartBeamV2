@@ -182,6 +182,9 @@ const getSecurityData = (type, value) => {
   // 只有调用分页器的时候需要传入type和value
   if (type === 'page') {
     params.page = value
+  } else {
+    currentPage.value = 1
+    params.page = 1
   }
   securityStore.getSecurityData(params)
 }

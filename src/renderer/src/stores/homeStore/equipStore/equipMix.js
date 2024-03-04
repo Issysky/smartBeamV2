@@ -454,7 +454,6 @@ export const useEquipMixStore = defineStore('equipMix', () => {
   }
   // 获取导出excel的数据
   const getExportExcelData = (data) => {
-    console.log(data, 'excleData')
     let arr = []
     arr = data.map((item, index) => {
       return [

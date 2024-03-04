@@ -7,7 +7,62 @@
       <!-- 表格顶部区域 -->
       <div class="top-wrapper">
         <!-- 过滤器 -->
-        <div class="filter"></div>
+        <!-- 过滤器 -->
+        <div class="filter">
+          <div class="time-select">
+            <el-date-picker
+              v-model="datePickerValue"
+              type="datetimerange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              format="YYYY/MM/DD hh:mm:ss"
+              value-format="YYYY-MM-DD hh:mm:ss "
+              @change="getParams('time', datePickerValue)"
+            />
+          </div>
+          <div class="status-select">
+            <!-- <span>超标等级</span> -->
+            <el-select
+              v-model="status"
+              class="m-2"
+              filterable
+              placeholder="超标等级"
+              style="width: 240px"
+              @change="getParams('status', status)"
+            >
+              <el-option
+                v-for="item in statusArr"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </div>
+          <div class="input-wrapper">
+            <input
+              v-model="bridge"
+              type="text"
+              class="bridge"
+              placeholder="  桥梁筛选"
+              @blur="getParams('bridge', bridge)"
+            />
+          </div>
+          <div class="input-wrapper">
+            <input
+              v-model="beam_code"
+              type="text"
+              class="beam_code"
+              placeholder="  梁号筛选"
+              @blur="getParams('beam_code', beam_code)"
+            />
+          </div>
+          <div class="btn-arr">
+            <button @click="getBeamData('', '')">查询</button>
+            <button @click="resetParams('', '')">重置</button>
+            <button @click="productionBeamStore.exportExcelData()">导出</button>
+          </div>
+        </div>
       </div>
       <!-- 表格主体 -->
       <div class="table">
@@ -36,11 +91,12 @@
           >
             <p class="value" v-for="(valueKey, i) in productionBeamStore.beamDataKeys" :key="index">
               <!-- 实际方量加后缀 -->
-              {{ item[valueKey] }}
+              {{ valueKey === 'status' ? getStatus(item[valueKey]) : item[valueKey] }}
               <!-- 详情显示字体图标 -->
               <el-icon
                 v-if="valueKey === 'detail'"
                 :style="{ cursor: 'pointer', fontSize: '1.5em' }"
+                @click="openDetailAlert(item.name)"
                 ><Document
               /></el-icon>
             </p>
@@ -48,7 +104,15 @@
         </div>
       </div>
       <!-- 分页器 -->
-      <div class="pagination"></div>
+      <div class="pagination">
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          v-model:current-page="currentPage"
+          @change="getBeamData('page', currentPage)"
+          :total="productionBeamStore.totalPage * 10"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -64,16 +128,12 @@ const productionBeamStore = useProductionBeamStore()
 const currentPage = ref(1)
 // 选择日期
 const datePickerValue = ref('')
-// 强度等级
-const strengthGrade = ref('')
-// 设备编号
-const mixStationCode = ref('')
-// 浇筑部位
-const pouringPosition = ref('')
+// 桥梁
+const bridge = ref('')
+// 梁号
+const beam_code = ref('')
 // 风险等级
-const excessGrade = ref('')
-// 任务工单号
-const taskId = ref('')
+const status = ref('')
 // 定义传出的筛选数据
 let params = reactive({
   page_size: 10
@@ -85,11 +145,11 @@ const isSortShow = reactive({
 })
 
 // 风险等级数组
-const excessGradeArr = [
-  { label: '不超标', value: 0 },
-  { label: '一级超标', value: 1 },
-  { label: '二级超标', value: 2 },
-  { label: '三级超标', value: 3 }
+const statusArr = [
+  { label: '生产中', value: 'producing' },
+  { label: '未生产', value: 'not_produced' },
+  { label: '存梁区', value: 'in_storage' },
+  { label: '已架设', value: 'in_bridge' }
 ]
 
 // 根据筛选获得参数
@@ -97,21 +157,13 @@ const getParams = (key, value) => {
   if (key === 'time') {
     params.time_from = value[0]
     params.time_to = value[1]
-  } else if (key === 'strengthGrade') {
-    params.StrengthGrade = value
-  } else if (key === 'mixStationCode') {
-    params.MixStationCode = value
-  } else if (key === 'pouringPosition') {
-    params.PouringPosition = value
-  } else if (key === 'excessGrade') {
-    params.ExcessGrade = value
-  } else if (key === 'page') {
-    params.page = value
-  } else if (key === 'taskId') {
-    params.TaskId = value
+  } else if (key === 'beam_code') {
+    params.beam_code = value
+  } else if (key === 'bridge') {
+    params.bridge = value
+  } else if (key === 'status') {
+    params.status = value
   }
-
-  console.log(params)
 }
 // 重置筛选参数
 const resetParams = () => {
@@ -120,14 +172,28 @@ const resetParams = () => {
     ordering: '-time'
   }
   datePickerValue.value = ''
-  strengthGrade.value = ''
-  mixStationCode.value = ''
-  pouringPosition.value = ''
-  excessGrade.value = ''
-  taskId.value = ''
-  getMixStationData('', '')
+  status.value = ''
+  bridge.value = ''
+  beam_code.value = ''
+  getBeamData('', '')
 }
-
+// 获得状态
+const getStatus = (status) => {
+  if (status === 'producing') {
+    return '生产中'
+  } else if (status === 'not_produced') {
+    return '未生产'
+  } else if (status === 'in_storage') {
+    return '存梁区'
+  } else if (status === 'in_bridge') {
+    return '已架设'
+  }
+}
+// 打开详情弹窗
+const openDetailAlert = (beam_name) => {
+  productionBeamStore.getDetailData(beam_name)
+  productionBeamStore.showDetail()
+}
 // 排序
 const sortBy = (key) => {
   // 切换排序按钮显示
@@ -137,32 +203,23 @@ const sortBy = (key) => {
     isSortShow.show = key
   }
   params.ordering = isSortShow.show
-  getMixStationData('', '')
+  getBeamData('', '')
 }
 
 // 获取页面数据
-const getMixStationData = (type, value) => {
+const getBeamData = (type, value) => {
   // 只有调用分页器的时候需要传入type和value
   if (type === 'page') {
     params.page = value
+  } else {
+    currentPage.value = 1
+    params.page = 1
   }
-  equipMixStore.getMixData(params)
-}
-// 获取超标图片
-const getExcessGradeImg = (value) => {
-  if (value === 0) {
-    return '/src/assets/img/screenImg/无.png'
-  } else if (value === 1) {
-    return '/src/assets/img/screenImg/数字1.png'
-  } else if (value === 2) {
-    return '/src/assets/img/screenImg/数字2.png'
-  } else if (value === 3) {
-    return '/src/assets/img/screenImg/数字3.png'
-  }
+  productionBeamStore.getBeamData(params)
 }
 
 onMounted(() => {
-  productionBeamStore.getBeamData(params)
+  getBeamData('', '')
 })
 </script>
 <style scoped lang="less">
@@ -217,7 +274,7 @@ onMounted(() => {
             }
           }
         }
-        .excess-select {
+        .status-select {
           width: 10%;
           height: 100%;
           display: flex;
@@ -231,7 +288,7 @@ onMounted(() => {
           justify-content: flex-end;
           align-items: center;
           button {
-            flex: 1;
+            width: 100px;
             height: 40%;
             margin-left: 4%;
             border: none;
@@ -251,7 +308,7 @@ onMounted(() => {
       height: 75%;
       .title-wrapper {
         width: 100%;
-        height: 10%;
+        height: 7%;
         display: flex;
         background-color: #60626633;
         border-radius: 15px;
@@ -306,11 +363,6 @@ onMounted(() => {
           border-radius: 15px;
           &:hover {
             background-color: #fff;
-          }
-          & > :last-child {
-            &:hover {
-              color: #34b2f7;
-            }
           }
           .value {
             width: 20%;

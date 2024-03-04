@@ -3,6 +3,7 @@
   <div class="production-beam-data-wrapper">
     <LabelType1 label="梁体数据" eng="ProductionBeam" />
     <FormBeamData />
+    <DetailAlert v-if="productionBeamStore.is_showDetail" />
   </div>
 </template>
 
@@ -11,6 +12,7 @@ import { onMounted,ref,reactive } from 'vue'
 import { useProductionBeamStore } from '@renderer/stores/homeStore/productionStore/production_beam_data.js'
 import LabelType1 from '@renderer/components/LabelType1.vue'
 import FormBeamData from './components/FormBeamData.vue';
+import DetailAlert from './components/DetailAlert.vue';
 
 const productionBeamStore = useProductionBeamStore()
 
