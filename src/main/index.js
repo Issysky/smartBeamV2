@@ -3,10 +3,9 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import dns from 'dns'
-import { spawn } from 'child_process' 
+import { spawn } from 'child_process'
 import path from 'path'
-import python_src from '../../resources/python/main.py?asset'
-
+import python_src from '../../resources/python/main.py?asset&asarUnpack'
 
 let mainWindow
 spawn('python', [python_src])
@@ -108,10 +107,10 @@ app.whenReady().then(() => {
     shell.openExternal(url)
   })
   // 获取mp4路径
-  ipcMain.handle('getVideoPath', (event,fileName) => {
-    const mp4Path = path.join(app.getAppPath(), 'resources', 'video',`${fileName}.mp4`);
+  ipcMain.handle('getVideoPath', (event, fileName) => {
+    const mp4Path = path.join(app.getAppPath(), 'resources', 'video', `${fileName}.mp4`)
     return mp4Path
-})
+  })
 
   createWindow()
 

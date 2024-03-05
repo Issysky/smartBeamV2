@@ -2,18 +2,10 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { onMounted, onBeforeUnmount, ref } from 'vue'
 import { useRouter } from 'vue-router'
-
-
-const router = useRouter()
-
-onMounted(async () => {
-
-})
 </script>
 
 <template>
   <main>
-
     <RouterView />
   </main>
 </template>
