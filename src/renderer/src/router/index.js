@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory,createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
 // import { useUserStore } from '../stores/user'
 
 const router = createRouter({
@@ -28,23 +28,19 @@ const router = createRouter({
           component: () => import('../views/HomeView/ScreenView/ScreenView.vue')
         },
         // 数字孪生
-        // {
-        //   path: 'digital_twin',
-        //   name: 'digital_twin',
-        //   component: () => import('../views/secondViews/DigitalTwinView.vue'),
-        //   children: [
-        //     {
-        //       path: 'digital_twin__beam_1',
-        //       name: 'digital_twin__beam_1',
-        //       component: () => import('../views/thirdViews/DigitalTwinBeamView.vue')
-        //     },
-        //     {
-        //       path: 'locked',
-        //       name: 'locked',
-        //       component: () => import('../views/LockedView.vue')
-        //     }
-        //   ]
-        // },
+        {
+          path: 'digital_twin',
+          name: 'digital_twin',
+          component: () => import('../views/HomeView/DigitalTwinView/DigitalTwinView.vue'),
+          children: [
+            {
+              path: 'digital_twin__beam_1',
+              name: 'digital_twin__beam_1',
+              component: () =>
+                import('../views/HomeView/DigitalTwinView/DigitalTwinBeamView/DigitalTwinBeamView.vue')
+            }
+          ]
+        },
         // 设备管理
         {
           path: 'equip',
@@ -55,19 +51,22 @@ const router = createRouter({
             {
               path: 'equip__template',
               name: 'equip__template',
-              component: () => import('../views/HomeView/EquipView/EquipTemplateView/EquipTemplateView.vue')
+              component: () =>
+                import('../views/HomeView/EquipView/EquipTemplateView/EquipTemplateView.vue')
             },
             // 蒸养棚
             {
               path: 'equip__steam',
               name: 'equip__steam',
-              component: () => import('../views/HomeView/EquipView/EquipSteamView/EquipSteamView.vue')
+              component: () =>
+                import('../views/HomeView/EquipView/EquipSteamView/EquipSteamView.vue')
             },
             // 监控
             {
               path: 'equip__monitor',
               name: 'equip__monitor',
-              component: () => import('../views/HomeView/EquipView/EquipMonitorView/EquipMonitorView.vue')
+              component: () =>
+                import('../views/HomeView/EquipView/EquipMonitorView/EquipMonitorView.vue')
             },
             // 拌合站
             {
@@ -76,8 +75,8 @@ const router = createRouter({
               component: () => import('../views/HomeView/EquipView/EquipMixView/EquipMixView.vue')
             },
             {
-              path:'equip__gas',
-              name:'equip__gas',
+              path: 'equip__gas',
+              name: 'equip__gas',
               component: () => import('../views/HomeView/EquipView/EquipGasView/EquipGasView.vue')
             },
             {
@@ -96,12 +95,14 @@ const router = createRouter({
             {
               path: 'production__beam',
               name: '梁片数据',
-              component: () => import('../views/HomeView/ProductionView/ProductionBeamView/ProductionBeamView.vue')
+              component: () =>
+                import('../views/HomeView/ProductionView/ProductionBeamView/ProductionBeamView.vue')
             },
             {
               path: 'production__beam_plan',
               name: '梁片计划排程',
-              component: () => import('../views/HomeView/ProductionView/ProductionPlanView/ProductionPlanView.vue')
+              component: () =>
+                import('../views/HomeView/ProductionView/ProductionPlanView/ProductionPlanView.vue')
             },
             {
               path: 'locked',
@@ -119,7 +120,8 @@ const router = createRouter({
             {
               path: 'security__ai_camera',
               name: 'security__ai_camera',
-              component: () => import('../views/HomeView/SecurityView/SecurityCameraView/SecurityCameraView.vue')
+              component: () =>
+                import('../views/HomeView/SecurityView/SecurityCameraView/SecurityCameraView.vue')
             },
             {
               path: 'locked',
@@ -137,12 +139,14 @@ const router = createRouter({
             {
               path: 'ai__production',
               name: 'ai__production',
-              component: () => import('../views/HomeView/AIQAView/AIProductionView/AIProductionView.vue')
+              component: () =>
+                import('../views/HomeView/AIQAView/AIProductionView/AIProductionView.vue')
             },
             {
               path: 'ai__knowledge',
               name: 'ai__knowledge',
-              component: () => import('../views/HomeView/AIQAView/AIEngineerView/AIEngineerView.vue')
+              component: () =>
+                import('../views/HomeView/AIQAView/AIEngineerView/AIEngineerView.vue')
             },
             {
               path: 'locked',
@@ -160,17 +164,22 @@ const router = createRouter({
             {
               path: 'set_base__screen',
               name: 'set_base__screen',
-              component: () => import('../views/HomeView/SettingMenuView/SetBaseScreenView/SetBaseScreenView.vue')
+              component: () =>
+                import('../views/HomeView/SettingMenuView/SetBaseScreenView/SetBaseScreenView.vue')
             },
             {
               path: 'set_equip__template',
               name: 'set_equip__template',
-              component: () => import('../views/HomeView/SettingMenuView/SetEquipTemplateView/SetEquipTemplateView.vue')
+              component: () =>
+                import(
+                  '../views/HomeView/SettingMenuView/SetEquipTemplateView/SetEquipTemplateView.vue'
+                )
             },
             {
-              path:'set_equip__steam',
-              name:'set_equip__steam',
-              component: () => import('../views/HomeView/SettingMenuView/SetEquipSteamView/SetEquipSteamView.vue')
+              path: 'set_equip__steam',
+              name: 'set_equip__steam',
+              component: () =>
+                import('../views/HomeView/SettingMenuView/SetEquipSteamView/SetEquipSteamView.vue')
             }
           ]
         }

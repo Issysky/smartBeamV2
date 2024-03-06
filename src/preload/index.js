@@ -22,7 +22,12 @@ const topBar = {
   // 打开外链
   openExternal: (url) => ipcRenderer.send('open-external-link', url),
   // 获取mp4路径
-  getVideoPath: (fileName) => ipcRenderer.invoke('getVideoPath', fileName),
+  getVideoPath: (fileName) => ipcRenderer.invoke('getVideoPath', fileName)
+}
+
+const threeApi = {
+  getGlbPath: (fileName) => ipcRenderer.invoke('getGlbPath', fileName),
+  getHdrPath: (fileName) => ipcRenderer.invoke('getHdrPath', fileName)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
@@ -32,6 +37,7 @@ if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('topBar', topBar)
+    contextBridge.exposeInMainWorld('threeApi', threeApi)
   } catch (error) {
     console.error(error)
   }

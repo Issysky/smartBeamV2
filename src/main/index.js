@@ -111,6 +111,16 @@ app.whenReady().then(() => {
     const mp4Path = path.join(app.getAppPath(), 'resources', 'video', `${fileName}.mp4`)
     return mp4Path
   })
+  // 获取glb模型相关文件的路径
+  ipcMain.handle('getGlbPath', (event, fileName) => {
+    const glbPath = path.join(app.getAppPath(), 'resources', 'model', 'glb',`${fileName}`)
+    return glbPath
+  })
+  // 获取hdr材质相关文件的路径
+  ipcMain.handle('getHdrPath', (event, fileName) => {
+    const hdrPath = path.join(app.getAppPath(), 'resources', 'model', 'hdr',`${fileName}`)
+    return hdrPath
+  })
 
   createWindow()
 
