@@ -4,8 +4,16 @@
     <div class="three-wrapper">
       <ThreeScene />
     </div>
-    <div class="text">
-      {{ digitalTwinStore.clickObjName }}
+    <div
+      class="text"
+      :style="{ left: digitalTwinBeamStore.dialogPosition.x, top: digitalTwinBeamStore.dialogPosition.y }"
+    >
+      <p>
+        {{ 'name:' + digitalTwinBeamStore.clickObjName }}
+      </p>
+      <p>
+        {{ 'userData.name:' + digitalTwinBeamStore.objData.userData.name }}
+      </p>
     </div>
   </div>
 </template>
@@ -14,22 +22,26 @@
 import ThreeScene from './components/ThreeScene.vue'
 import { useDigitalTwinBeamStore } from '@renderer/stores/homeStore/digitalTwinStore/digitalTwinBeam'
 
-const digitalTwinStore = useDigitalTwinBeamStore()
+const digitalTwinBeamStore = useDigitalTwinBeamStore()
 </script>
 <style scoped lang="less">
 .digital-twin-beam-wrapper {
   width: 100%;
   height: 100%;
+  position: relative;
   .three-wrapper {
-    width: 1000px;
+    width: 900x;
     height: 800px;
   }
-  .text{
-    width: 100px;
+  .text {
+    width: 300px;
     height: 100px;
+    position: absolute;
     background-color: #fff;
-    text-align: center;
-    line-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 }
 </style>
