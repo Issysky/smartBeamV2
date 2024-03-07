@@ -105,6 +105,12 @@ const router = createRouter({
                 import('../views/HomeView/ProductionView/ProductionPlanView/ProductionPlanView.vue')
             },
             {
+              path:'production__build',
+              name:'架桥数据',
+              component: () =>
+                import('../views/HomeView/ProductionView/ProductionBuildView/ProductionBuildView.vue')
+            },
+            {
               path: 'locked',
               name: 'locked',
               component: () => import('../views/LockedView/LockedView.vue')

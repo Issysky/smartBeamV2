@@ -2,24 +2,11 @@
 <template>
   <div class="digital-twin-beam-wrapper">
     <div class="three-wrapper">
-      <ThreeScene />
-    </div>
-    <div
-      class="text"
-      :style="{ left: digitalTwinBeamStore.dialogPosition.x, top: digitalTwinBeamStore.dialogPosition.y }"
-    >
-      <p>
-        {{ 'name:' + digitalTwinBeamStore.clickObjName }}
-      </p>
-      <p>
-        {{ 'userData.name:' + digitalTwinBeamStore.objData.userData.name }}
-      </p>
     </div>
   </div>
 </template>
 
 <script setup lang="js">
-import ThreeScene from './components/ThreeScene.vue'
 import { useDigitalTwinBeamStore } from '@renderer/stores/homeStore/digitalTwinStore/digitalTwinBeam'
 
 const digitalTwinBeamStore = useDigitalTwinBeamStore()

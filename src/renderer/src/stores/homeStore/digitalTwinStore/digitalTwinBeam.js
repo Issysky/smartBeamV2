@@ -30,7 +30,6 @@ export const useDigitalTwinBeamStore = defineStore('digitalTwinBeam', () => {
   const changeDialogPosition = (x, y) => {
     dialogPosition.x = x+'px'
     dialogPosition.y = y+'px'
-    console.log(dialogPosition,'dialogPosition')
   }
   return {
     clickObjName,
