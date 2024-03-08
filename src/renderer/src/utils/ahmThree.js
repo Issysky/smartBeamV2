@@ -19,7 +19,7 @@ export function ahmLoadGlb(file_url) {
           if (child.isLight) {
             child.castShadow = true;
             child.receiveShadow = true;
-            child.intensity *= .01
+            child.intensity *= .001
           }
         });
         console.log(gltf,'gltf');

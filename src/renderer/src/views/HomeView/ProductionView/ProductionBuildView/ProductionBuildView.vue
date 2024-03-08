@@ -4,11 +4,7 @@
     <LabelType1 :label="'架桥地图'" :eng="'Production Build'" />
     <div class="three-wrapper">
       <ThreeBridge />
-      <div class="slider-wrapper">
-        <span class="demonstration">位移</span>
-        <el-slider v-model="value1" />
-        
-      </div>
+      
     </div>
     <div class="content"></div>
   </div>
@@ -17,6 +13,15 @@
 <script setup lang="js">
 import ThreeBridge from './components/ThreeBridge.vue'
 import LabelType1 from '@renderer/components/LabelType1.vue'
+import { useProductionBuildStore } from '@renderer/stores/homeStore/productionStore/production_build'
+import { onMounted,ref } from 'vue'
+
+const productionBuildStore = useProductionBuildStore()
+
+
+onMounted(() => {
+  productionBuildStore.getBridgeData()
+})
 </script>
 <style scoped lang="less">
 .production-bridge-view {
@@ -31,20 +36,7 @@ import LabelType1 from '@renderer/components/LabelType1.vue'
     width: 1500px;
     height: 40%;
     background-color: #bfc;
-    .slider-wrapper {
-      width: 100%;
-      height: 20%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      .demonstration {
-
-        margin-right: 20px;
-      }
-      .el-slider {
-        width: 300px;
-      }
-    }
+    
   }
   .content {
     width: 100%;

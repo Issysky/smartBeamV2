@@ -16,7 +16,9 @@ const envStore = useEnvStore()
 onMounted(() => {
   setTimeout(() => {
     myChart = echarts.init(chart.value)
-    envStore.getEnvData(myChart, 'air')
+    if (myChart) {
+      envStore.getEnvData(myChart, 'air')
+    }
   }, 1700)
   window.addEventListener('resize', () => {
     myChart.resize()

@@ -36,7 +36,9 @@ onMounted(() => {
   month = date.getMonth() + 1
   setTimeout(() => {
     myChart = echarts.init(chart.value)
-    chartMonthStore.getChartData(myChart, 'beam')
+    if (myChart) {
+      chartMonthStore.getChartData(myChart, 'beam')
+    }
   }, 1600)
   window.addEventListener('resize', () => {
     myChart.resize()

@@ -16,7 +16,9 @@ const screenStore = useScreenStore()
 onMounted(() => {
   setTimeout(() => {
     myChart = echarts.init(chart.value)
-    screenStore.chartSetOption(myChart, screenStore.productionLineOption.option)
+    if(myChart) {
+      screenStore.chartSetOption(myChart, screenStore.productionLineOption.option)
+    }
   }, 1700)
   window.addEventListener('resize', () => {
     myChart.resize()
