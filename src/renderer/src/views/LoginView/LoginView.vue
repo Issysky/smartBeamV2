@@ -110,8 +110,8 @@ const login = (username, pwd) => {
           loginWrapper.value.style.display = 'none'
           window.topBar.max()
           localStorage.setItem('online', 'online')
-          router.push('/home/screen')
-          // router.push('/startVideo')
+          // router.push('/home/screen')
+          router.push('/startVideo')
           // router.push('/home/AItalk/AI__production')
         } else {
           // 登录失败
@@ -316,6 +316,9 @@ onMounted(() => {
         background-color: #409eff;
       }
     }
+    .el-alert__content{
+      font-size: 80px;
+    }
     .linkUs {
       position: absolute;
       bottom: 80px;
@@ -327,5 +330,8 @@ onMounted(() => {
       }
     }
   }
+}
+.el-alert__title{
+  font-size: 12px;
 }
 </style>

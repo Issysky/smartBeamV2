@@ -188,6 +188,25 @@ const router = createRouter({
                 import('../views/HomeView/SettingMenuView/SetEquipSteamView/SetEquipSteamView.vue')
             }
           ]
+        },
+        // 劳务管理
+        {
+          path: 'labour',
+          name: 'labour',
+          component: () => import('../views/HomeView/LaborView/LaborView.vue'),
+          children: [
+            {
+              path: 'labour__scene',
+              name: 'labour__scene',
+              component: () =>
+                import('../views/HomeView/LaborView/LaborBasicView/LaborBasicView.vue')
+            },
+            {
+              path: 'locked',
+              name: 'locked',
+              component: () => import('../views/LockedView/LockedView.vue')
+            }
+          ]
         }
       ]
     },

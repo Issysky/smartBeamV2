@@ -84,7 +84,10 @@ export const useFormBeamStore = defineStore('beam', () => {
 
   // 处理时间
   const handleTime = (time) => {
-    const hourtime = time.split('T')[1]
+    // const hourtime = time.split('T')[1]
+    if(time === null){
+      return ''
+    }
     const fulltime = time.split('T').join(' ').substring(5, 19)
     return fulltime
   }

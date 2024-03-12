@@ -2,6 +2,7 @@
 
 <template>
   <div class="three">
+    <!-- 标题切换 -->
     <div class="label-switch-wrapper">
       <p class="label">{{ productionBuildStore.currentBridge.data.bridge }}</p>
       <span class="down" @click="switchShow()"
@@ -19,19 +20,14 @@
         </div>
       </div>
     </div>
+    <!-- 3d场景 -->
     <div ref="sceneRef" class="scene"></div>
-    <!-- <div class="slider-wrapper">
-      <span class="demonstration">x位移</span>
-      <el-slider v-model="valueX" max=" 400" show-input @input="changePosition('x', valueX)" />
-    </div>
+    <!--横向位移滑块 -->
     <div class="slider-wrapper">
-      <span class="demonstration">y位移</span>
-      <el-slider v-model="valueY" max=" 400" show-input @input="changePosition('y', valueY)" />
-    </div> -->
-    <div class="slider-wrapper">
-      <span class="demonstration">z位移</span>
-      <el-slider v-model="valueZ" :max="400" show-input @input="changePosition('z', valueZ)" />
+      <span class="demonstration">镜头位置</span>
+      <el-slider v-model="valueZ" :max="400" @input="changePosition('z', valueZ)" />
     </div>
+    <!-- 点击弹窗 -->
     <div
       class="alert-wrapper"
       :style="{
@@ -40,6 +36,7 @@
       }"
       v-if="is_show_detail"
     >
+      <!-- 梁片信息  -->
       <div class="content-wrapper">
         <p>{{ '名称:' + currentObj.userData.name }}</p>
         <p>{{ '梁号:' + currentObj.userData.beam_code }}</p>
@@ -337,7 +334,6 @@ onMounted(async () => {
   width: 100%;
   height: 100%;
   position: relative;
-  background-color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -349,6 +345,7 @@ onMounted(async () => {
     justify-content: center;
     // background-color: red;
     position: relative;
+    top: -40px;
     .label {
       font-size: 28px;
       font-weight: 600;
@@ -367,18 +364,20 @@ onMounted(async () => {
       left: 50%;
       background-color: #fff;
       overflow-y: auto;
+      padding-top: 20px;
       .item {
         width: 100%;
         height: 30px;
         line-height: 30px;
         text-align: center;
+        margin-bottom: 10px;
         cursor: pointer;
         &:hover {
-          background-color: #f0f0f0;
+          background-color: var(--color-primary-hover);
         }
       }
       .active {
-        background-color: #f0f0f0;
+        background-color: var(--color-primary);
       }
     }
   }
@@ -405,31 +404,35 @@ onMounted(async () => {
   }
   .alert-wrapper {
     width: 200px;
-    height: 300px;
+    height: 260px;
     position: fixed;
     border-radius: 10px;
     background-color: #fff;
     z-index: 2;
+    padding-top: 20px;
     .content-wrapper {
-      width: 180;
+      width: 150px;
       height: 140px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       justify-content: flex-start;
       padding: 10px 20px;
+
       p {
+        width: 100%;
         font-size: 18px;
         margin-bottom: 10px;
+        border-bottom: 2px solid #f0f0f0;
       }
     }
     .btn-wrapper {
       width: 100%;
-      height: 100px;
+      height: 80px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-around;
+      justify-content: flex-end;
       button {
         width: 100px;
         height: 30px;
@@ -439,6 +442,7 @@ onMounted(async () => {
         border: none;
         cursor: pointer;
         font-size: 12px;
+        margin-bottom: 10px;
       }
       .close-alert {
         background-color: var(--color-danger);
