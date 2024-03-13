@@ -46,10 +46,10 @@ export const useProductionBuildStore = defineStore('ProductionBuild', () => {
     { name: '幅序号', width: '', key: 'x_index' },
     { name: '排序号', width: '', key: 'y_index' },
     { name: '架设状态', width: '', key: 'status' },
-    { name: '架设时间', width: '', key: 'detail' }
+    { name: '架设时间', width: '', key: 'bridge_time' }
   ]
   // 图表数据的key
-  const bridgeDataKey = ['id', 'name', 'beam_code', 'x_index', 'y_index', 'status', 'detail']
+  const bridgeDataKey = ['id', 'name', 'beam_code', 'x_index', 'y_index', 'status', 'bridge_time']
 
   //   请求桥梁数据，渲染3d模型
   const getBridgeData = async () => {
@@ -90,7 +90,13 @@ export const useProductionBuildStore = defineStore('ProductionBuild', () => {
       headers: { Authorization: localStorage.getItem('token') }
     })
     console.log(res.data, 'res.data')
-    bridgeTableData.data = res.data.results
+
+    bridgeTableData.data = res.data.results.map((item) => {
+      return {
+        ...item,
+        bridge_time: item.bridge_time ? item.bridge_time.split('T')[0]+item.bridge_time.split('T')[1].substring(0,8) : ''
+      }
+    })
     totalPage.value = res.data.total_pages
   }
 

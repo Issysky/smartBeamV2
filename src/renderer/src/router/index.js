@@ -191,15 +191,27 @@ const router = createRouter({
         },
         // 劳务管理
         {
-          path: 'labour',
-          name: 'labour',
+          path: 'labor',
+          name: 'labor',
           component: () => import('../views/HomeView/LaborView/LaborView.vue'),
           children: [
             {
-              path: 'labour__scene',
-              name: 'labour__scene',
+              path: 'labor__scene',
+              name: 'labor__scene',
               component: () =>
                 import('../views/HomeView/LaborView/LaborBasicView/LaborBasicView.vue')
+            },
+            {
+              path: 'labor__attendance',
+              name: 'labor__attendance',
+              component: () =>
+                import('../views/HomeView/LaborView/LaborAttendanceView/LaborAttendanceView.vue')
+            },
+            {
+              path: 'labor__history',
+              name: 'labor__history',
+              component: () =>
+                import('../views/HomeView/LaborView/LaborHistoryView/LaborHistoryView.vue')
             },
             {
               path: 'locked',

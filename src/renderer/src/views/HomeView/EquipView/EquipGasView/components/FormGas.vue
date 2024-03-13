@@ -307,7 +307,7 @@ onMounted(() => {
       height: 45%;
       .title-wrapper {
         width: 100%;
-        height: 10%;
+        height: 40px;
         display: flex;
         background-color: #60626633;
         border-radius: 15px;
@@ -343,7 +343,7 @@ onMounted(() => {
         height: 85%;
         .value-column {
           width: 100%;
-          height: 10%;
+          height: 30px;
           // margin-bottom: .5%;
           display: flex;
           justify-content: center;

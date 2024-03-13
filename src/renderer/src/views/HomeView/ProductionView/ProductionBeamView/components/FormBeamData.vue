@@ -137,7 +137,7 @@ const beam_code = ref('')
 const status = ref('')
 // 定义传出的筛选数据
 let params = reactive({
-  page_size: 10
+  page_size: 18
 })
 
 // 排序按钮是否显示
@@ -169,7 +169,7 @@ const getParams = (key, value) => {
 // 重置筛选参数
 const resetParams = () => {
   params = {
-    page_size: 10,
+    page_size: 18,
     ordering: '-time'
   }
   datePickerValue.value = ''
@@ -309,7 +309,7 @@ onMounted(() => {
       height: 75%;
       .title-wrapper {
         width: 100%;
-        height: 7%;
+        height: 40px;
         display: flex;
         background-color: #60626633;
         border-radius: 15px;
@@ -347,8 +347,7 @@ onMounted(() => {
         height: 85%;
         .value-column {
           width: 100%;
-          height: 10%;
-          // margin-bottom: .5%;
+          height: 30px;
           display: flex;
           justify-content: center;
           align-items: center;

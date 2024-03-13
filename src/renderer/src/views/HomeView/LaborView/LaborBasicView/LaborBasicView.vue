@@ -2,7 +2,9 @@
   <div class="labour-basic-wrapper">
     <LabelType1 :label="'场内统计'" :eng="'Labour Basic'" />
     <div class="content">
-      <div class="left"></div>
+      <div class="left">
+        <ChartLaborBasic />
+      </div>
       <div class="right">
         <TableBasic />
       </div>
@@ -13,6 +15,7 @@
 <script setup lang="js">
 import LabelType1 from '@renderer/components/LabelType1.vue'
 import TableBasic from './components/TableBasic.vue'
+import ChartLaborBasic from './components/ChartLaborBasic.vue';
 </script>
 <style scoped lang="less">
 .labour-basic-wrapper {
@@ -29,14 +32,13 @@ import TableBasic from './components/TableBasic.vue'
     .left {
       width: 30%;
       height: 100%;
-      background-color: #bfc;
       border-radius: 15px;
     }
     .right {
-      width: 70%;
-      height: 100%;
-      background-color: #bfc885;
+      width: 67%;
+      height: 95%;
       border-radius: 15px;
+      box-shadow: 0 0 15px 0px rgba(0, 0, 0, 0.1);
     }
   }
 }

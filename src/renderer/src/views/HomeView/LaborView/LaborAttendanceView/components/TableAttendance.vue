@@ -1,22 +1,38 @@
 <!-- 安全事件图表组件,出现在安全时间三级路由 -->
 <template>
   <!-- 表格外框 -->
-  <div class="table-mix-wrapper">
+  <div class="table-attendance-wrapper">
     <!-- 图表 -->
     <div class="table-wrapper">
       <!-- 表格顶部区域 -->
       <div class="top-wrapper">
-        <div class="card" v-for="(item, index) in laborBasicStore.cardData.data">
-          <p class="label">{{ item.label }}</p>
-          <div class="content">
-            <p class="value">{{ item.value }}</p>
-            <p class="unit" v-if="item.unit">{{ item.unit }}</p>
-            <div class="detail" v-if="!item.unit">
-              <p class="label1">{{ item.label1 }}</p>
-              <p class="value1">{{ item.value1 }}</p>
-              <p class="label1">{{ item.label2 }}</p>
-              <p class="value1">{{ item.value1 }}</p>
-            </div>
+        <div class="filter">
+          <div class="time-select">
+            <el-date-picker
+              v-model="datePickerValue"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              format="YYYY/MM/DD"
+              value-format="YYYY-MM-DD"
+              @change="getParams('time', datePickerValue)"
+            />
+          </div>
+          <!-- 文本框筛选 -->
+          <div class="input-wrapper">
+            <input
+              v-model="name"
+              type="text"
+              class="name"
+              placeholder="姓名筛选"
+              @blur="getParams('name', name)"
+            />
+          </div>
+          <div class="btn-arr">
+            <button @click="getSecurityData('', '')">查询</button>
+            <button @click="resetParams('', '')">重置</button>
+            <button @click="">导出</button>
           </div>
         </div>
       </div>
@@ -25,7 +41,8 @@
         <div class="title-wrapper">
           <div
             class="title"
-            v-for="(item, index) in laborBasicStore.laborBasicColumns"
+            :style="{width:item.width}"
+            v-for="(item, index) in laborAttendanceStore.laborAttendanceColumns"
             :key="index"
           >
             <span> {{ item.name }}</span>
@@ -34,13 +51,13 @@
         <div class="value-wrapper">
           <div
             class="value-column"
-            v-for="(item, index) in laborBasicStore.laborBasicData.data"
+            v-for="(item, index) in laborAttendanceStore.laborAttendanceData.data"
             :key="index"
           >
             <p
               class="value"
-              :class="{ time: valueKey === 'index8' }"
-              v-for="(valueKey, i) in laborBasicStore.laborBasicDataKey"
+              :style="{width:laborAttendanceStore.laborAttendanceColumns[i].width}"
+              v-for="(valueKey, i) in laborAttendanceStore.laborAttendanceDataKey"
               :key="index"
             >
               <!-- 缩略图和事件类型特殊处理 -->
@@ -57,8 +74,8 @@
           background
           layout="prev, pager, next"
           v-model:current-page="currentPage"
-          @change="getLaborBasicData('page', currentPage)"
-          :total="laborBasicStore.totalPage * 10"
+          @change="getLaborAttendanceData('page', currentPage)"
+          :total="laborAttendanceStore.totalPage * 10"
         />
       </div>
     </div>
@@ -68,9 +85,12 @@
 
 <script setup lang="js">
 import { onMounted, reactive, ref } from 'vue'
-import { useLaborBasicStore } from '@renderer/stores/homeStore/laborStore/laborBasic'
+import { useLaborAttendanceStore } from '@renderer/stores/homeStore/laborStore/laborAttendance'
 // 引入store
-const laborBasicStore = useLaborBasicStore()
+const laborAttendanceStore = useLaborAttendanceStore()
+
+const name = ref('')
+const datePickerValue = ref('')
 
 // 定义传出的筛选数据
 let params = reactive({
@@ -83,7 +103,7 @@ const isSortShow = reactive({
 })
 
 // 获取页面数据
-const getLaborBasicData = (type, value) => {
+const getLaborAttendanceData = (type, value) => {
   // 只有调用分页器的时候需要传入type和value
   if (type === 'page') {
     params.page = value
@@ -94,11 +114,11 @@ const getLaborBasicData = (type, value) => {
 }
 
 onMounted(() => {
-  laborBasicStore.getLaborBasicData(params)
+  laborAttendanceStore.getLaborAttendanceData(params)
 })
 </script>
 <style scoped lang="less">
-.table-mix-wrapper {
+.table-attendance-wrapper {
   width: 94%;
   height: 100%;
   padding: 0 3%;
@@ -112,67 +132,70 @@ onMounted(() => {
     align-items: center;
     .top-wrapper {
       width: 100%;
-      height: 15%;
+      height: 10%;
       margin-top: 30px;
       display: flex;
       justify-content: space-around;
-      .card {
-        width: 20%;
-        height: 100px;
-        background-color: #fff;
-        border-radius: 15px;
+      .filter {
+        width: 100%;
+        height: 100%;
         display: flex;
-        flex-direction: column;
-        justify-content: center;
         align-items: center;
-        box-shadow: 7px 7px 10px #00000033;
-        .label {
-          width: 80%;
-          height: 40%;
-          font-size: 20px;
-          color: var(--font-level-13);
-          font-weight: 600;
+        font-size: 0.8em;
+        .time-select {
+          width: 20%;
+          height: 100%;
           display: flex;
           align-items: center;
-          justify-content: flex-start;
+          margin-right: 2%;
         }
-        .content {
-          height: 60%;
-          width: 80%;
+
+        .input-wrapper {
+          width: 9%;
+          height: 100%;
           display: flex;
           align-items: center;
-          justify-content: flex-start;
-          font-size: 20px;
-          color: var(--font-level-13);
-          p {
-            height: 40px;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-          }
-          .value {
-            font-size: 30px;
-            color: var(--color-primary);
-            font-weight: 600;
-          }
-          .unit {
-            height: 30px;
-            font-size: 14px;
-            color: var(--font-level-13);
-            line-height: 20px;
-          }
-          .detail {
-            width: 60%;
-            height: 60%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            .label1 {
-              font-size: 14px;
-              color: var(--font-level-13);
+          justify-content: center;
+          margin-right: 2%;
+
+          input {
+            width: 100%;
+            height: 33%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            &:focus {
+              border: 1px solid #409eff;
+              outline: none;
             }
-            .value1 {
-              font-size: 14px;
+            &::placeholder {
+              color: #a8abb2;
+            }
+          }
+        }
+        .excess-select {
+          width: 10%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          margin-right: 30%;
+        }
+        .btn-arr {
+          width: 30%;
+          height: 100%;
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          button {
+            flex: 1;
+            height: 40%;
+            margin-left: 4%;
+            border: none;
+            border-radius: 5px;
+            background-color: #34b2f7;
+            color: var(--font-level-1);
+            &:hover {
+              cursor: pointer;
+              background-color: #79bbff;
             }
           }
         }
@@ -180,7 +203,7 @@ onMounted(() => {
     }
     .table {
       width: 100%;
-      height: 65%;
+      height: 75%;
       .title-wrapper {
         width: 100%;
         height: 40px;
@@ -246,7 +269,6 @@ onMounted(() => {
             }
           }
         }
-
       }
     }
     .pagination {

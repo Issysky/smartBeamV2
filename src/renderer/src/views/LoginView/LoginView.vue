@@ -110,8 +110,8 @@ const login = (username, pwd) => {
           loginWrapper.value.style.display = 'none'
           window.topBar.max()
           localStorage.setItem('online', 'online')
-          // router.push('/home/screen')
-          router.push('/startVideo')
+          router.push('/home/screen')
+          // router.push('/startVideo')
           // router.push('/home/AItalk/AI__production')
         } else {
           // 登录失败
