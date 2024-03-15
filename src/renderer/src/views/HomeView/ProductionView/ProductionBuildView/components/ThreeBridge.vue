@@ -25,7 +25,7 @@
     <!--横向位移滑块 -->
     <div class="slider-wrapper">
       <span class="demonstration">镜头位置</span>
-      <el-slider v-model="valueZ" :max="400" @input="changePosition('z', valueZ)" />
+      <el-slider v-model="valueZ" :max="(productionBuildStore.beamData.data.length/5 - 3)*30" @input="changePosition('z', valueZ)" />
     </div>
     <!-- 点击弹窗 -->
     <div
@@ -128,6 +128,7 @@ const changeAlertPosition = (x, y) => {
 // 关闭弹窗
 const closeAlert = () => {
   is_show_detail.value = false
+  currentObj.position.y = beamHeight
 }
 // 切换桥梁
 const switchBridge = (index, item) => {
@@ -222,7 +223,7 @@ const generateBridge = (objArr, scene, num) => {
 const initThree = async () => {
   // 场景大小
   const scenex = 1500
-  const sceney = 300
+  const sceney = 360
   // 通过主进程加载模型和贴图
   const modelUrl = await window.threeApi.getGlbPath('beam.glb')
   const exr = await window.threeApi.getHdrPath('a.exr')
@@ -344,10 +345,11 @@ onMounted(async () => {
     align-items: center;
     justify-content: center;
     // background-color: red;
-    position: relative;
-    top: -40px;
+    position: absolute;
+    margin-top: 30px;
+    color: var(--font-level-1);
     .label {
-      font-size: 28px;
+      font-size: 32px;
       font-weight: 600;
     }
     .down {
@@ -390,11 +392,13 @@ onMounted(async () => {
     width: 100%;
     height: 20%;
     position: absolute;
-    bottom: 40px;
+    bottom: -30px;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1;
+    color: var(--font-level-1);
+
     .demonstration {
       margin-right: 20px;
     }

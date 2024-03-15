@@ -207,11 +207,17 @@ const router = createRouter({
               component: () =>
                 import('../views/HomeView/LaborView/LaborAttendanceView/LaborAttendanceView.vue')
             },
+            // {
+            //   path: 'labor__history',
+            //   name: 'labor__history',
+            //   component: () =>
+            //     import('../views/HomeView/LaborView/LaborHistoryView/LaborHistoryView.vue')
+            // },
             {
               path: 'labor__history',
               name: 'labor__history',
               component: () =>
-                import('../views/HomeView/LaborView/LaborHistoryView/LaborHistoryView.vue')
+                import('../views/HomeView/LaborView/LaborTunnelView/Index.vue')
             },
             {
               path: 'locked',

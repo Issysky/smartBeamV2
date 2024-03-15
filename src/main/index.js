@@ -17,6 +17,7 @@ function createWindow() {
     height: 420,
     show: false,
     autoHideMenuBar: true,
+    icon: path.join(__dirname, '../../resources/icon.png'),
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),

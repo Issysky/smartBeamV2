@@ -170,7 +170,7 @@
   const taskId = ref('')
   // 定义传出的筛选数据
   let params = reactive({
-    page_size: 10,
+    page_size: 19,
     ordering: '-time'
   })
   

@@ -5,7 +5,7 @@
     <p class="label">{{ templateData.showName }}</p>
     <!-- 左侧区域 -->
     <div class="left-wrapper">
-      <img class="template-img" :src="getImg()" alt="模板" />
+      <img class="template-img" src="@renderer/assets/img/equipImg/模板.png" alt="模板" />
       <button class="contarl-steam btn" @click="showMonitor()" v-if="true">视频监控</button>
       <button class="switch-contral btn" @click="handle()" :class="{ close: !isActive }">
         {{ isActive ? '设备控制' : '关闭弹窗' }}
@@ -168,7 +168,7 @@ const getImg = () => {
   if (1) {
     return '/src/assets/img/equipImg/模板.png'
   } else {
-    return '/src/assets/img/equipImg/模板.png'
+    return '/src/img/equipImg/模板.png'
   }
 }
 </script>

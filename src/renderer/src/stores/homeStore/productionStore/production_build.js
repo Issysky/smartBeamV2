@@ -66,7 +66,9 @@ export const useProductionBuildStore = defineStore('ProductionBuild', () => {
       headers: { Authorization: localStorage.getItem('token') }
     })
     beamData.data = res.data
+    console.log(beamData.data, 'beamData.data')
     callback()
+
   }
 
   //   切换桥梁

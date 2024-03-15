@@ -70,6 +70,8 @@ import { useEquipSteamStore } from '@renderer/stores/homeStore/equipStore/equipS
 import { useMonitorStore } from '@renderer/stores/homeStore/equipStore/monitor.js'
 import { useSettingEquipSteamStore } from '@renderer/stores/homeStore/settingMenuStore/settingEquipSteam.js'
 import ChartTemHum from './ChartTemHum.vue'
+import steamingImg from '@renderer/assets/img/equipImg/养生中.png?asset&asarUnpack'
+import freeImg from '@renderer/assets/img/equipImg/闲置中.png?asset&asarUnpack'
 
 //定义时间范围
 const timeRange = ref('')
@@ -138,9 +140,9 @@ const showMonitor = () => {
 const getImg = () => {
   if (!apiSteamData.data[0]) return 0
   if (apiSteamData.data[0].door[0] === 0) {
-    return '/src/assets/img/equipImg/闲置中.png'
+    return freeImg
   } else {
-    return '/src/assets/img/equipImg/养生中.png'
+    return steamingImg
   }
 }
 // 获取温度

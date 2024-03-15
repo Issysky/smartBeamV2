@@ -158,6 +158,10 @@ import { onMounted, reactive, ref } from 'vue'
 import { useEquipMixStore } from '@renderer/stores/homeStore/equipStore/equipMix'
 import ChartExcess from './ChartExcess.vue'
 import ChartQuanityActual from './ChartQuanityActual.vue'
+import level0Img from '@renderer/assets/img/screenImg/无.png?asset&asarUnpack'
+import level1Img from '@renderer/assets/img/screenImg/数字1.png?asset&asarUnpack'
+import level2Img from '@renderer/assets/img/screenImg/数字2.png?asset&asarUnpack'
+import level3Img from '@renderer/assets/img/screenImg/数字3.png?asset&asarUnpack'
 
 // 引入store
 const equipMixStore = useEquipMixStore()
@@ -215,6 +219,7 @@ const getParams = (key, value) => {
 
   console.log(params)
 }
+
 // 重置筛选参数
 const resetParams = () => {
   params = {
@@ -256,13 +261,13 @@ const getMixStationData = (type, value) => {
 // 获取超标图片
 const getExcessGradeImg = (value) => {
   if (value === 0) {
-    return '/src/assets/img/screenImg/无.png'
+    return level0Img
   } else if (value === 1) {
-    return '/src/assets/img/screenImg/数字1.png'
+    return level1Img
   } else if (value === 2) {
-    return '/src/assets/img/screenImg/数字2.png'
+    return level2Img
   } else if (value === 3) {
-    return '/src/assets/img/screenImg/数字3.png'
+    return level3Img
   }
 }
 
