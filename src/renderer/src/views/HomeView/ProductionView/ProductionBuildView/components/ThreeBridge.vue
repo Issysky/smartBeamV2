@@ -25,7 +25,7 @@
     <!--横向位移滑块 -->
     <div class="slider-wrapper">
       <span class="demonstration">镜头位置</span>
-      <el-slider v-model="valueZ" :max="(productionBuildStore.beamData.data.length/5 - 3)*30" @input="changePosition('z', valueZ)" />
+      <el-slider v-model="valueZ" :max="150" :min="0" @input="changePosition('z', valueZ)" />
     </div>
     <!-- 点击弹窗 -->
     <div
@@ -64,7 +64,7 @@
 
 <script setup>
 import * as THREE from 'three'
-import { nextTick, onMounted, reactive, ref } from 'vue'
+import { nextTick, onMounted, reactive, ref, onBeforeUnmount } from 'vue'
 import * as ahmThree from '@renderer/utils/ahmThree.js'
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js'
 import { useProductionBuildStore } from '@renderer/stores/homeStore/productionStore/production_build'
@@ -86,6 +86,9 @@ const mousePosition = reactive({
   x: 0,
   y: 0
 })
+
+// 镜头位移滑块最大距离
+const maxDistance = ref(0)
 
 // 定义梁的高度
 let beamHeight = null
@@ -112,6 +115,12 @@ let transparentMaterial = new THREE.MeshBasicMaterial({
   transparent: true,
   opacity: 0.5
 })
+
+// 镜头位移滑块最大距离
+const getMaxDistance = () => {
+  if (!productionBuildStore.beamData.data.length) return 0
+  return (productionBuildStore.beamData.data.length / 5 - 3) * 30
+}
 // 打开/关闭下拉框
 const switchShow = () => {
   is_show_switch.value = !is_show_switch.value
@@ -327,6 +336,12 @@ onMounted(async () => {
   setTimeout(() => {
     initThree()
   }, 1000)
+})
+
+onBeforeUnmount(() => {
+  while (scene.children.length > 0) {
+    scene.remove(scene.children[0])
+  }
 })
 </script>
 

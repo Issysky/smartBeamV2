@@ -273,6 +273,7 @@ onMounted(() => {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin-top: 10px;
         .outline-login {
           margin: 0;
           font-size: 0.6em;

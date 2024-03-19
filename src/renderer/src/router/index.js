@@ -111,6 +111,12 @@ const router = createRouter({
                 import('../views/HomeView/ProductionView/ProductionBuildView/ProductionBuildView.vue')
             },
             {
+                path:'production__beam_storage',
+                name:'存梁数据',
+                component: () =>
+                  import('../views/HomeView/ProductionView/ProductionBeamStorageView/ProductionBeamStorageView.vue')
+              },
+            {
               path: 'locked',
               name: 'locked',
               component: () => import('../views/LockedView/LockedView.vue')
