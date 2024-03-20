@@ -373,28 +373,36 @@ onBeforeUnmount(() => {
       cursor: pointer;
     }
     .switch-bridge-wrapper {
-      width: 200px;
+      width: 140px;
       height: 150px;
       border-radius: 15px;
       position: absolute;
       top: 50px;
       left: 50%;
-      background-color: #fff;
       overflow-y: auto;
       padding-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #808080;
       .item {
-        width: 100%;
+        width: 90%;
         height: 30px;
         line-height: 30px;
         text-align: center;
         margin-bottom: 10px;
+        border-radius: 15px;
+        font-size: 14px;
+        font-weight: 600;
         cursor: pointer;
         &:hover {
-          background-color: var(--color-primary-hover);
+          background-color: #fff;
+          color: var(--font-level-13);
         }
       }
       .active {
-        background-color: var(--color-primary);
+        background-color: #fff;
+        color: var(--font-level-13);
       }
     }
   }

@@ -9,17 +9,17 @@
         <!-- <p class="label">当前架设进度</p> -->
         <div class="value-wrapper">
           <div class="total">
-            <p class="title">当前桥梁架梁数：</p>
+            <p class="title">当前需架梁数：</p>
             <p class="num">12</p>
             <p class="unit">片</p>
           </div>
           <div class="complate">
-            <p class="title">当前桥梁梁体总数：</p>
+            <p class="title">当前已架梁数：</p>
             <p class="num">40</p>
             <p class="unit">片</p>
           </div>
           <div class="progress-wrapper">
-            <span>当前桥梁架设进度:</span>
+            <span>架设完工比例:</span>
             <div class="progress">
               <el-progress
                 :text-inside="true"
@@ -74,7 +74,7 @@ onMounted(() => {
     left: 70px;
     color: var(--font-level-1);
     .info-card {
-      width: 400px;
+      width: 700px;
       height: 100%;
       // background-color: #fff;
       border-radius: 10px;
@@ -83,21 +83,21 @@ onMounted(() => {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      justify-content: center;
+      justify-content: flex-start;
       .value-wrapper {
-        width: 100%;
-        height: 100%;
+        width: 80%;
+        height: 40%;
         display: flex;
-        flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: flex-start;
-        font-size: 16px;
-        .title{
-          width: 150px;
-        }
+        font-size: 14px;
+        background-color: var(--color-info);
+        padding: 0 10px;
+        border-radius: 20px;
+        margin-top: 10px;
         .total {
-          width: 100%;
-          flex: 1;
+          width: 160px;
+          height: 100%;
           display: flex;
           justify-content: flex-start;
           align-items: center;
@@ -111,9 +111,9 @@ onMounted(() => {
           }
         }
         .complate {
-          width: 100%;
           display: flex;
-          flex: 1;
+          width: 180px;
+          height: 100%;
           justify-content: flex-start;
           align-items: center;
           .unit {
@@ -121,19 +121,18 @@ onMounted(() => {
             font-size: 14px;
           }
           .num {
-            
             font-size: 22px;
             color: var(--color-primary);
           }
         }
         .progress-wrapper {
-          width: 100%;
-          display: flex;
           flex: 1;
+          height: 100%;
+          display: flex;
           align-items: center;
           .progress {
             margin-left: 10px;
-            width: 160px;
+            width: 100px;
           }
         }
       }
