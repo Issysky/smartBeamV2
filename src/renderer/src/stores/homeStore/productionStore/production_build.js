@@ -68,7 +68,6 @@ export const useProductionBuildStore = defineStore('ProductionBuild', () => {
     beamData.data = res.data
     console.log(beamData.data, 'beamData.data')
     callback()
-
   }
 
   //   切换桥梁
@@ -76,14 +75,18 @@ export const useProductionBuildStore = defineStore('ProductionBuild', () => {
     currentBridge.data = bridgeData.data[index]
   }
   //   修改梁片状态
-  const changeBeamStatus = async (id, status) => {
-    await axios.patch(
-      beamStatusUrl + id + '/',
-      { status: status },
-      {
-        headers: { Authorization: localStorage.getItem('token') }
-      }
-    )
+  const changeBeamStatus = async (id, time) => {
+    await axios
+      .patch(
+        beamStatusUrl + id + '/',
+        { bridge_time: time?time:null },
+        {
+          headers: { Authorization: localStorage.getItem('token') }
+        }
+      )
+      .then((res) => {
+        console.log(res, 'res')
+      })
   }
   // 获取分页后的桥梁数据，下方图表用
   const getBridgeDataPage = async (params) => {
@@ -96,7 +99,9 @@ export const useProductionBuildStore = defineStore('ProductionBuild', () => {
     bridgeTableData.data = res.data.results.map((item) => {
       return {
         ...item,
-        bridge_time: item.bridge_time ? item.bridge_time.split('T')[0]+item.bridge_time.split('T')[1].substring(0,8) : ''
+        bridge_time: item.bridge_time
+          ? item.bridge_time.split('T')[0] + item.bridge_time.split('T')[1].substring(0, 8)
+          : ''
       }
     })
     totalPage.value = res.data.total_pages

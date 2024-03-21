@@ -25,7 +25,7 @@
     <!--横向位移滑块 -->
     <div class="slider-wrapper">
       <span class="demonstration">镜头位置</span>
-      <el-slider v-model="valueZ" :max="150" :min="0" @input="changePosition('z', valueZ)" />
+      <el-slider v-model="valueZ" :max="350" :min="0" @input="changePosition('z', valueZ)" />
     </div>
     <!-- 点击弹窗 -->
     <div
@@ -38,7 +38,7 @@
     >
       <!-- 梁片信息  -->
       <div class="content-wrapper">
-        <p>{{ '名称:' + currentObj.userData.name }}</p>
+        <p class="label">{{ currentObj.userData.name }}</p>
         <p>{{ '梁号:' + currentObj.userData.beam_code }}</p>
         <p>{{ '梁型:' + currentObj.userData.beam_type }}</p>
         <p>{{ '状态:' + getBeamStatus(currentObj.userData.status) }}</p>
@@ -103,6 +103,7 @@ let renderer = null
 let controls = null
 let raycaster = new THREE.Raycaster()
 let mouse = new THREE.Vector2()
+let modelUrl = null
 // 定义当前摄像机
 let currentCamera = null
 // 定义场景
@@ -157,24 +158,42 @@ const getBeamStatus = (status) => {
 // 改变摄像机位置
 const changePosition = (axis, value) => {
   if (axis === 'z') {
-    currentCamera.position[axis] = -(value + 26)
+    currentCamera.position[axis] = -value
   } else {
     currentCamera.position[axis] = value
   }
 }
 // 变为未架设状态
 const toTransparent = (id) => {
-  currentObj.material = transparentMaterial
-  productionBuildStore.changeBeamStatus(id, 'back')
+  currentObj.children[1].material = transparentMaterial
+  productionBuildStore.changeBeamStatus(id)
 }
 // 变为已架设状态
 const toOpaque = (id) => {
-  currentObj.material = defaultMaterial
-  productionBuildStore.changeBeamStatus(id, 'in_bridge')
+  if (currentObj) {
+    currentObj.children[1].material = defaultMaterial
+  } else {
+    console.error('currentObj is null or undefined')
+  }
+  const time = getCurrentTime()
+  productionBuildStore.changeBeamStatus(id, time)
 }
+// 获取当前时间
+const getCurrentTime = () => {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = now.getMonth() + 1 // getMonth() 返回的月份从 0 开始
+  const day = now.getDate()
+  const hour = now.getHours()
+  const minute = now.getMinutes()
+  const second = now.getSeconds()
 
+  // 使用 `padStart` 方法来确保月、日、时、分、秒总是两位数
+  return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')} ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:${String(second).padStart(2, '0')}`
+}
 // 生成桥梁
 const generateBridge = (objArr, scene, num) => {
+  console.log(objArr, 'objArr')
   // 获取模型中的梁
   const middleBeam1 = objArr.getObjectByName('中梁')
   const middleBeam2 = objArr.getObjectByName('中梁001')
@@ -204,7 +223,6 @@ const generateBridge = (objArr, scene, num) => {
   // 遍历梁片数据生成梁片
   for (let k = 0; k < productionBuildStore.beamData.data.length; k++) {
     let beamClone = null
-    // 默认为透明材质
     if (productionBuildStore.beamData.data[k].y_index === 1) {
       beamClone = leftBeam.clone()
     } else if (productionBuildStore.beamData.data[k].y_index === 2) {
@@ -216,13 +234,13 @@ const generateBridge = (objArr, scene, num) => {
     } else if (productionBuildStore.beamData.data[k].y_index === 5) {
       beamClone = rightBeam.clone()
     }
-    beamClone.material = transparentMaterial
-
+    // 默认为透明材质
+    beamClone.children[1].material = transparentMaterial
     beamClone.position.z += (productionBuildStore.beamData.data[k].x_index - 1) * beamZPosition
     beamClone.userData = productionBuildStore.beamData.data[k]
-    // 如果已经假设变为不透明
+    // 如果已经架设变为不透明
     if (beamClone.userData.status === 'in_bridge') {
-      beamClone.material = defaultMaterial
+      beamClone.children[1].material = defaultMaterial
     }
     scene.add(beamClone)
   }
@@ -234,17 +252,17 @@ const initThree = async () => {
   const scenex = 1500
   const sceney = 360
   // 通过主进程加载模型和贴图
-  const modelUrl = await window.threeApi.getGlbPath('beam.glb')
+  modelUrl = await window.threeApi.getGlbPath('beam.glb')
   const exr = await window.threeApi.getHdrPath('a.exr')
   // 自定义方法加载场景
   ahmThree.ahmLoadGlb(modelUrl).then(({ glb_scene, cameras_array, animations_array }) => {
     cameras = cameras_array
     currentCamera = cameras[0]
-    currentCamera.position.set(valueX.value, valueY.value, valueZ.value)
+    // currentCamera.position.set(valueX.value, valueY.value, valueZ.value)
     changePosition('z', valueZ.value)
 
     // 默认材质
-    defaultMaterial = glb_scene.getObjectByName('中梁').material
+    defaultMaterial = glb_scene.getObjectByName('中梁').children[1].material
 
     // 默认的东西
     const test_light = glb_scene.getObjectByName('日光')
@@ -287,10 +305,12 @@ const initThree = async () => {
       let intersects = raycaster.intersectObjects(scene.children, true)
 
       if (intersects.length > 0) {
-        if (!intersects[0].object.is_pillar) {
+        console.log(intersects, 'intersects[0].object')
+        if (!intersects[0].object.is_pillar && intersects[0].object.userData.is_group) {
           changeAlertPosition(event.clientX, event.clientY)
           lastObj = currentObj
-          currentObj = intersects[0].object
+          currentObj = intersects[0].object.parent
+          console.log(getBeamByMaterialName(currentObj))
           // 点击下一个让上一个归位,如果点击同一个也归位
           if (lastObj) {
             lastObj.position.y = beamHeight
@@ -300,8 +320,8 @@ const initThree = async () => {
             return
           }
           productionBuildStore.clickObjName(currentObj.userData)
-          gsap.to(intersects[0].object.position, {
-            y: intersects[0].object.position.y + 2,
+          gsap.to(currentObj.position, {
+            y: currentObj.position.y + 2,
             duration: 0.3,
             ease: 'power1.out'
           })
@@ -326,6 +346,16 @@ const clearScene = () => {
     scene.remove(scene.children[0])
   }
   sceneRef.value.removeChild(renderer.domElement)
+}
+// 通过材质名字返回梁体
+const getBeamByMaterialName = (obj) => {
+  obj.children.forEach((item, index) => {
+    if (item.material.name !== '钢筋') {
+      console.log(item.material.name,item)
+      return item
+    }
+  })
+  //   return null
 }
 
 onMounted(async () => {
@@ -410,6 +440,7 @@ onBeforeUnmount(() => {
   .scene {
     width: 1500px;
     height: 300px;
+    // transform: scaleX(-1);
   }
   .slider-wrapper {
     width: 100%;
@@ -431,11 +462,13 @@ onBeforeUnmount(() => {
   }
   .alert-wrapper {
     width: 200px;
-    height: 260px;
+    height: 220px;
     position: fixed;
     border-radius: 10px;
+    // background-color: var(--color-info);
     background-color: #fff;
     z-index: 2;
+    border: 2px solid var(--color-info);
     padding-top: 20px;
     .content-wrapper {
       width: 150px;
@@ -444,24 +477,35 @@ onBeforeUnmount(() => {
       flex-direction: column;
       align-items: flex-start;
       justify-content: flex-start;
-      padding: 10px 20px;
+      padding: 0 20px;
+      margin-bottom: 30px;
 
       p {
         width: 100%;
-        font-size: 18px;
+        font-size: 16px;
         margin-bottom: 10px;
-        border-bottom: 2px solid #f0f0f0;
+        color: var(--font-level-13);
+        letter-spacing: 2px;
+        // border-bottom: 1px solid #f0f0f0;
+        margin-bottom: 12px;
+      }
+      .label {
+        font-size: 20px;
+        font-weight: 600;
+        display: flex;
+        justify-content: center;
+        border-bottom: none;
       }
     }
     .btn-wrapper {
       width: 100%;
-      height: 80px;
+      height: 40px;
       display: flex;
-      flex-direction: column;
+      //   flex-direction: column;
       align-items: center;
-      justify-content: flex-end;
+      justify-content: space-evenly;
       button {
-        width: 100px;
+        width: 90px;
         height: 30px;
         border-radius: 5px;
         background-color: var(--color-primary);

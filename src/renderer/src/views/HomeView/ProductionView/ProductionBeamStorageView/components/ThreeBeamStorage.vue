@@ -1,9 +1,25 @@
 <!-- 存梁现场3D组件 -->
 <template>
   <div class="three">
-    <button @click="changeCamera()">清空</button>
+    <button @click="changeCamera()">切换镜头</button>
     <!-- 3d场景 -->
     <div ref="sceneRef" class="scene"></div>
+    <!-- 点击弹窗 -->
+    <div
+      class="alert-wrapper"
+      :style="{
+        top: `${mousePosition.y}px`,
+        left: `${mousePosition.x}px`
+      }"
+      v-if="is_show_detail"
+      @click="stopPropagation()"
+    >
+      <div class="btn-wrapper">
+        <button @click="putBeam()">添加梁体</button>
+        <button @click="removeBeam()">移除梁体</button>
+        <button @click="closeAlert" class="close-alert">关闭弹窗</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -27,23 +43,23 @@ let currentCamera = null
 // 定义场景
 let scene = new THREE.Scene()
 
-// 定义世界坐标
-let worldPosition = new THREE.Vector3()
+// 是否展示弹窗
+const is_show_detail = ref(false)
+// 当前鼠标位置
+const mousePosition = reactive({
+  x: 0,
+  y: 0
+})
 
 // 定义当前选中对象
 let currentObj = null
 // 定义上次选中对象
 let lastObj = null
-// 定义默认材质
-let defaultMaterial = null
-// 定义透明材质
-let transparentMaterial = new THREE.MeshBasicMaterial({
-  transparent: true,
-  opacity: 0.5
-})
+// 定义基础梁体模型
+let beam = null
 
 // 添加梁体到台座上
-const putBeam = (beam) => {
+const putBeam = () => {
   if (currentObj.children.length >= 2) return
   const obj = beam.clone()
   currentObj.add(obj)
@@ -52,6 +68,11 @@ const putBeam = (beam) => {
     y += 2
   })
   obj.position.set(0, y, 0)
+}
+// 移除梁体
+const removeBeam = () => {
+  if (currentObj.children.length <= 0) return
+  currentObj.remove(currentObj.children[currentObj.children.length - 1])
 }
 
 // 切换摄像机
@@ -62,7 +83,24 @@ const changeCamera = () => {
     currentCamera = cameras[0]
   }
 }
-
+// 改变弹窗位置
+const changeAlertPosition = (x, y) => {
+  console.log(x, y, 'x, y')
+  if (x > 1600) {
+    mousePosition.x = x - 200
+  } else {
+    mousePosition.x = x
+  }
+  mousePosition.y = y + 10
+}
+// 关闭弹窗
+const closeAlert = () => {
+  is_show_detail.value = false
+}
+// 弹窗点击事件,组织事件冒泡
+const stopPropagation = () => {
+  event.stopPropagation()
+}
 // 初始化
 const initThree = async () => {
   // 场景大小
@@ -71,15 +109,13 @@ const initThree = async () => {
   // 通过主进程加载模型和贴图
   const modelUrl = await window.threeApi.getGlbPath('beamStorage.glb')
   // 自定义方法加载场景
-  ahmThree.ahmLoadGlb(modelUrl).then(({ glb_scene, cameras_array, animations_array }) => {
+  ahmThree.ahmLoadGlb(modelUrl, 0.005).then(({ glb_scene, cameras_array, animations_array }) => {
     cameras = cameras_array
     currentCamera = cameras[0]
     scene.add(glb_scene, currentCamera)
 
-    //   // 获取默认材质
-    defaultMaterial = glb_scene.getObjectByName('立方体003_1').material
     // 获取梁体
-    let beam = glb_scene.getObjectByName('立方体001_1')
+    beam = glb_scene.getObjectByName('立方体001_1')
     console.log(beam, 'beam')
 
     // 创建渲染器
@@ -98,7 +134,6 @@ const initThree = async () => {
       // 获取场景元素的边界框
       if (!sceneRef.value) return
       const rect = sceneRef.value.getBoundingClientRect()
-
       // 计算鼠标位置相对于场景元素的坐标
       const x = event.clientX - rect.left
       const y = event.clientY - rect.top
@@ -114,20 +149,21 @@ const initThree = async () => {
       if (intersects.length > 0) {
         intersects.forEach((item) => {
           if (item.object.userData.is_pedstal && !is_pedstal) {
-            console.log(item.object, 'item.object')
+            // 展示弹窗
+            changeAlertPosition(event.clientX, event.clientY)
             // 如果当前选中对象存在
             if (currentObj) {
               lastObj = currentObj
-              //   lastObj.material = defaultMaterial
             }
+
             currentObj = item.object
-            // currentObj.material = transparentMaterial
             is_pedstal = true
-            // currentObj.getWorldPosition(worldPosition)
-            // console.log(currentObj,'currentObj')
-            // console.log(worldPosition,'worldPosition')
-            // 添加梁体到台座上
-            putBeam(beam)
+            // 如果点击同一个也归位
+            if (lastObj === currentObj && is_show_detail.value) {
+              is_show_detail.value = false
+            } else {
+              is_show_detail.value = true
+            }
             return
           }
         })
@@ -184,8 +220,6 @@ onBeforeUnmount(() => {
   cameras = null
   currentCamera = null
 
-  // 销毁材质
-  defaultMaterial = null
 })
 </script>
 <style scoped lang="less">
@@ -199,6 +233,53 @@ onBeforeUnmount(() => {
   .scene {
     width: 1500px;
     height: 300px;
+  }
+  .alert-wrapper {
+    width: 200px;
+    height: 260px;
+    position: fixed;
+    border-radius: 10px;
+    background-color: #fff;
+    z-index: 2;
+    padding-top: 20px;
+    .content-wrapper {
+      width: 150px;
+      height: 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding: 10px 20px;
+
+      p {
+        width: 100%;
+        font-size: 18px;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #f0f0f0;
+      }
+    }
+    .btn-wrapper {
+      width: 100%;
+      height: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      button {
+        width: 100px;
+        height: 30px;
+        border-radius: 5px;
+        background-color: var(--color-primary);
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        font-size: 12px;
+        margin-bottom: 10px;
+      }
+      .close-alert {
+        background-color: var(--color-danger);
+      }
+    }
   }
 }
 </style>
