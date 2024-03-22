@@ -25,7 +25,7 @@
     <!--横向位移滑块 -->
     <div class="slider-wrapper">
       <span class="demonstration">镜头位置</span>
-      <el-slider v-model="valueZ" :max="350" :min="0" @input="changePosition('z', valueZ)" />
+      <el-slider v-model="valueZ" :max="maxDistance" :min="0" @input="changePosition('z', valueZ)" />
     </div>
     <!-- 点击弹窗 -->
     <div
@@ -120,7 +120,7 @@ let transparentMaterial = new THREE.MeshBasicMaterial({
 // 镜头位移滑块最大距离
 const getMaxDistance = () => {
   if (!productionBuildStore.beamData.data.length) return 0
-  return (productionBuildStore.beamData.data.length / 5 - 3) * 30
+  maxDistance.value = (productionBuildStore.beamData.data.length/5-2)*30
 }
 // 打开/关闭下拉框
 const switchShow = () => {
@@ -158,20 +158,20 @@ const getBeamStatus = (status) => {
 // 改变摄像机位置
 const changePosition = (axis, value) => {
   if (axis === 'z') {
-    currentCamera.position[axis] = -value
+    currentCamera.position[axis] = -value - 55
   } else {
     currentCamera.position[axis] = value
   }
 }
 // 变为未架设状态
 const toTransparent = (id) => {
-  currentObj.children[1].material = transparentMaterial
+  currentObj.material = transparentMaterial
   productionBuildStore.changeBeamStatus(id)
 }
 // 变为已架设状态
 const toOpaque = (id) => {
   if (currentObj) {
-    currentObj.children[1].material = defaultMaterial
+    currentObj.material = defaultMaterial
   } else {
     console.error('currentObj is null or undefined')
   }
@@ -202,7 +202,10 @@ const generateBridge = (objArr, scene, num) => {
   const rightBeam = objArr.getObjectByName('右边梁')
   const pillar = objArr.getObjectByName('管桩')
   // 获取梁的z轴位置间距
-  const beamZPosition = objArr.getObjectByName('中梁003').position.z
+  const beamZPosition = -(
+    objArr.getObjectByName('中梁003').position.z - objArr.getObjectByName('中梁').position.z
+  )
+
   // 获取梁的高度
   beamHeight = middleBeam1.position.y
   for (let i = 0; i < num; i++) {
@@ -218,7 +221,7 @@ const generateBridge = (objArr, scene, num) => {
   }
   const pillarClone = pillar.clone()
   pillarClone.is_pillar = true
-  pillarClone.position.z += num * beamZPosition
+  pillarClone.position.z -= beamZPosition
   scene.add(pillarClone)
   // 遍历梁片数据生成梁片
   for (let k = 0; k < productionBuildStore.beamData.data.length; k++) {
@@ -235,12 +238,12 @@ const generateBridge = (objArr, scene, num) => {
       beamClone = rightBeam.clone()
     }
     // 默认为透明材质
-    beamClone.children[1].material = transparentMaterial
+    beamClone.material = transparentMaterial
     beamClone.position.z += (productionBuildStore.beamData.data[k].x_index - 1) * beamZPosition
     beamClone.userData = productionBuildStore.beamData.data[k]
     // 如果已经架设变为不透明
     if (beamClone.userData.status === 'in_bridge') {
-      beamClone.children[1].material = defaultMaterial
+      beamClone.material = defaultMaterial
     }
     scene.add(beamClone)
   }
@@ -259,18 +262,20 @@ const initThree = async () => {
     cameras = cameras_array
     currentCamera = cameras[0]
     // currentCamera.position.set(valueX.value, valueY.value, valueZ.value)
-    changePosition('z', valueZ.value)
 
     // 默认材质
-    defaultMaterial = glb_scene.getObjectByName('中梁').children[1].material
+    defaultMaterial = glb_scene.getObjectByName('中梁').material
 
     // 默认的东西
     const test_light = glb_scene.getObjectByName('日光')
     scene.add(test_light, currentCamera)
+    // scene.add(glb_scene)
     // 生成桥梁
     productionBuildStore.getBeamData(() => {
       generateBridge(glb_scene, scene, productionBuildStore.bridgeData.data[0].count / 5)
+      getMaxDistance()
     })
+    // changePosition('z', valueZ.value)
 
     // 创建渲染器
     renderer = new THREE.WebGLRenderer({ antialias: true })
@@ -305,12 +310,11 @@ const initThree = async () => {
       let intersects = raycaster.intersectObjects(scene.children, true)
 
       if (intersects.length > 0) {
-        console.log(intersects, 'intersects[0].object')
-        if (!intersects[0].object.is_pillar && intersects[0].object.userData.is_group) {
+        if (!intersects[0].object.is_pillar) {
           changeAlertPosition(event.clientX, event.clientY)
           lastObj = currentObj
-          currentObj = intersects[0].object.parent
-          console.log(getBeamByMaterialName(currentObj))
+          currentObj = intersects[0].object
+          console.log(currentObj, 'currentObj')
           // 点击下一个让上一个归位,如果点击同一个也归位
           if (lastObj) {
             lastObj.position.y = beamHeight
@@ -338,6 +342,8 @@ const initThree = async () => {
       if (controls) controls.update()
     }
     animate()
+    // 镜头默认位置
+    changePosition('z', valueZ.value)
   })
 }
 // 清除场景元素
@@ -351,7 +357,7 @@ const clearScene = () => {
 const getBeamByMaterialName = (obj) => {
   obj.children.forEach((item, index) => {
     if (item.material.name !== '钢筋') {
-      console.log(item.material.name,item)
+      console.log(item.material.name, item)
       return item
     }
   })

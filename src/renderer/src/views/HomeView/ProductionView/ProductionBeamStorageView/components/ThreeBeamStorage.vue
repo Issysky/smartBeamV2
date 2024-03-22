@@ -27,6 +27,9 @@
 import * as THREE from 'three'
 import { nextTick, onMounted, reactive, ref, onBeforeUnmount } from 'vue'
 import * as ahmThree from '@renderer/utils/ahmThree.js'
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
+import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js'
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js'
 import { gsap } from 'gsap'
 
@@ -57,8 +60,13 @@ let currentObj = null
 let lastObj = null
 // 定义基础梁体模型
 let beam = null
-
-// 添加梁体到台座上
+// 定义默认材质
+let defaultMaterial = null
+// 定义透明材质
+let transparentMaterial = new THREE.MeshBasicMaterial({
+  transparent: true,
+  opacity: 0.5
+})
 const putBeam = () => {
   if (currentObj.children.length >= 2) return
   const obj = beam.clone()
@@ -85,7 +93,6 @@ const changeCamera = () => {
 }
 // 改变弹窗位置
 const changeAlertPosition = (x, y) => {
-  console.log(x, y, 'x, y')
   if (x > 1600) {
     mousePosition.x = x - 200
   } else {
@@ -100,6 +107,11 @@ const closeAlert = () => {
 // 弹窗点击事件,组织事件冒泡
 const stopPropagation = () => {
   event.stopPropagation()
+}
+
+// 点击台座出现外边框
+const click1 = () => {
+  // 设置EffectComposer
 }
 // 初始化
 const initThree = async () => {
@@ -116,8 +128,8 @@ const initThree = async () => {
 
     // 获取梁体
     beam = glb_scene.getObjectByName('立方体001_1')
-    console.log(beam, 'beam')
-
+    // 获取默认材质
+    defaultMaterial = glb_scene.children[0].material
     // 创建渲染器
     renderer = new THREE.WebGLRenderer({ antialias: true })
     renderer.shadowMap.enabled = true
@@ -155,8 +167,8 @@ const initThree = async () => {
             if (currentObj) {
               lastObj = currentObj
             }
-
             currentObj = item.object
+
             is_pedstal = true
             // 如果点击同一个也归位
             if (lastObj === currentObj && is_show_detail.value) {
@@ -164,6 +176,8 @@ const initThree = async () => {
             } else {
               is_show_detail.value = true
             }
+            click1()
+
             return
           }
         })
@@ -219,7 +233,6 @@ onBeforeUnmount(() => {
   // 销毁相机
   cameras = null
   currentCamera = null
-
 })
 </script>
 <style scoped lang="less">

@@ -215,11 +215,7 @@ onMounted(() => {
           &:hover {
             background-color: #fff;
           }
-          & > :last-child {
-            &:hover {
-              color: #34b2f7;
-            }
-          }
+
           .value {
             width: 20%;
             height: 100%;

@@ -20,6 +20,7 @@ export function ahmLoadGlb(file_url,lightStrength = 0.001) {
             child.castShadow = true
             child.receiveShadow = true
             child.intensity *= lightStrength
+            child.shadow.bias = -0.0001
           }
         })
         console.log(gltf, 'gltf')
