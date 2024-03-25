@@ -1,14 +1,15 @@
 <!-- 二级路由生产数据  -->
 <template>
   <div class="production-wrapper">
-    
-    <RouterView></RouterView>
+    <RouterView v-slot="{Component}">
+      <keep-alive>
+        <component :is="Component" />
+      </keep-alive>
+    </RouterView>
   </div>
 </template>
 
-<script setup lang="js">
-
-</script>
+<script setup lang="js"></script>
 <style scoped lang="less">
 .production-wrapper {
   width: 100%;
@@ -19,5 +20,5 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-}
+} 
 </style>

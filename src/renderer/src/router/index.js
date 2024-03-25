@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
+import productionBeamStorage from '../views/HomeView/ProductionView/ProductionBeamStorageView/ProductionBeamStorageView.vue'
 // import { useUserStore } from '../stores/user'
 
 const router = createRouter({
@@ -37,7 +38,9 @@ const router = createRouter({
               path: 'digital_twin__beam_1',
               name: 'digital_twin__beam_1',
               component: () =>
-                import('../views/HomeView/DigitalTwinView/DigitalTwinBeamView/DigitalTwinBeamView.vue')
+                import(
+                  '../views/HomeView/DigitalTwinView/DigitalTwinBeamView/DigitalTwinBeamView.vue'
+                )
             }
           ]
         },
@@ -105,17 +108,18 @@ const router = createRouter({
                 import('../views/HomeView/ProductionView/ProductionPlanView/ProductionPlanView.vue')
             },
             {
-              path:'production__build',
-              name:'架桥数据',
+              path: 'production__build',
+              name: '架桥数据',
               component: () =>
-                import('../views/HomeView/ProductionView/ProductionBuildView/ProductionBuildView.vue')
+                import(
+                  '../views/HomeView/ProductionView/ProductionBuildView/ProductionBuildView.vue'
+                )
             },
             {
-                path:'production__beam_storage',
-                name:'存梁数据',
-                component: () =>
-                  import('../views/HomeView/ProductionView/ProductionBeamStorageView/ProductionBeamStorageView.vue')
-              },
+              path: 'production__beam_storage',
+              name: '存梁数据',
+              component: productionBeamStorage
+            },
             {
               path: 'locked',
               name: 'locked',
@@ -222,8 +226,7 @@ const router = createRouter({
             {
               path: 'labor__history',
               name: 'labor__history',
-              component: () =>
-                import('../views/HomeView/LaborView/LaborTunnelView/Index.vue')
+              component: () => import('../views/HomeView/LaborView/LaborTunnelView/Index.vue')
             },
             {
               path: 'locked',

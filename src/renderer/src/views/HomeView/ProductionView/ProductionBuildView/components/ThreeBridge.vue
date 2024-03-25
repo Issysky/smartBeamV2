@@ -289,7 +289,7 @@ const initThree = async () => {
     // controls = ahmThree.ahmControls(currentCamera, renderer.domElement)
 
     // 加载.exr文件并设置为环境贴图
-    ahmThree.ahmLoadEnv(exr, scene)
+    // ahmThree.ahmLoadEnv(exr, scene)
 
     // 添加鼠标点击事件
     window.addEventListener('click', (event) => {
@@ -337,7 +337,7 @@ const initThree = async () => {
     // 渲染循环
     function animate() {
       requestAnimationFrame(animate)
-      // 更新动画混合器
+      // 更新动画混合器 
       renderer.render(scene, currentCamera)
       if (controls) controls.update()
     }

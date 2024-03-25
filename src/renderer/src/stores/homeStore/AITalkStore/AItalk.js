@@ -46,7 +46,7 @@ export const useAITalkStore = defineStore('AItalk', () => {
   // 通义千问接口地址
   // const url = '119.45.206.196:5012/test'
   const url = 'http://119.45.206.196:5012/test'
-  // const url = 'http://119.45.206.196:5012/test/api/v1/services/aigc/text-generation/generation'
+
   // 请求头
   const headers = {
     'Content-Type': 'application/json',
