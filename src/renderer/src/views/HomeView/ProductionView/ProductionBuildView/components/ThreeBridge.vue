@@ -25,7 +25,12 @@
     <!--横向位移滑块 -->
     <div class="slider-wrapper">
       <span class="demonstration">镜头位置</span>
-      <el-slider v-model="valueZ" :max="maxDistance" :min="0" @input="changePosition('z', valueZ)" />
+      <el-slider
+        v-model="valueZ"
+        :max="productionBuildStore.maxDistance"
+        :min="0"
+        @input="changePosition('z', valueZ)"
+      />
     </div>
     <!-- 点击弹窗 -->
     <div
@@ -73,9 +78,6 @@ import { gsap } from 'gsap'
 let sceneRef = ref(null)
 const productionBuildStore = useProductionBuildStore()
 
-// 定义摄像机位置
-const valueX = ref(134)
-const valueY = ref(100)
 const valueZ = ref(0)
 // 是否展示下拉框
 const is_show_switch = ref(true)
@@ -97,17 +99,6 @@ let currentObj = null
 // 定义上次选中对象
 let lastObj = null
 
-// 初始化场景变量
-let cameras = null
-let renderer = null
-let controls = null
-let raycaster = new THREE.Raycaster()
-let mouse = new THREE.Vector2()
-let modelUrl = null
-// 定义当前摄像机
-let currentCamera = null
-// 定义场景
-const scene = new THREE.Scene()
 
 // 定义默认材质
 let defaultMaterial = null
@@ -120,7 +111,7 @@ let transparentMaterial = new THREE.MeshBasicMaterial({
 // 镜头位移滑块最大距离
 const getMaxDistance = () => {
   if (!productionBuildStore.beamData.data.length) return 0
-  maxDistance.value = (productionBuildStore.beamData.data.length/5-2)*30
+  maxDistance.value = (productionBuildStore.beamData.data.length / 5 - 2) * 30
 }
 // 打开/关闭下拉框
 const switchShow = () => {
@@ -137,15 +128,16 @@ const changeAlertPosition = (x, y) => {
 }
 // 关闭弹窗
 const closeAlert = () => {
+  if (currentObj) beamHeight = currentObj.position.y-2
   is_show_detail.value = false
   currentObj.position.y = beamHeight
 }
 // 切换桥梁
 const switchBridge = (index, item) => {
+  event.stopPropagation()
   if (item.bridge === productionBuildStore.currentBridge.data.bridge) return
   productionBuildStore.changeBridge(index)
-  clearScene()
-  initThree()
+  is_show_detail.value = false
 }
 // 获取梁片状态
 const getBeamStatus = (status) => {
@@ -157,11 +149,7 @@ const getBeamStatus = (status) => {
 }
 // 改变摄像机位置
 const changePosition = (axis, value) => {
-  if (axis === 'z') {
-    currentCamera.position[axis] = -value - 55
-  } else {
-    currentCamera.position[axis] = value
-  }
+  productionBuildStore.changePosition(axis, value)
 }
 // 变为未架设状态
 const toTransparent = (id) => {
@@ -191,194 +179,67 @@ const getCurrentTime = () => {
   // 使用 `padStart` 方法来确保月、日、时、分、秒总是两位数
   return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')} ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:${String(second).padStart(2, '0')}`
 }
-// 生成桥梁
-const generateBridge = (objArr, scene, num) => {
-  console.log(objArr, 'objArr')
-  // 获取模型中的梁
-  const middleBeam1 = objArr.getObjectByName('中梁')
-  const middleBeam2 = objArr.getObjectByName('中梁001')
-  const middleBeam3 = objArr.getObjectByName('中梁002')
-  const leftBeam = objArr.getObjectByName('左边梁')
-  const rightBeam = objArr.getObjectByName('右边梁')
-  const pillar = objArr.getObjectByName('管桩')
-  // 获取梁的z轴位置间距
-  const beamZPosition = -(
-    objArr.getObjectByName('中梁003').position.z - objArr.getObjectByName('中梁').position.z
-  )
-
-  // 获取梁的高度
-  beamHeight = middleBeam1.position.y
-  for (let i = 0; i < num; i++) {
-    // 克隆桥墩
-    const pillarClone = pillar.clone()
-    // 桥墩添加标识
-    pillarClone.is_pillar = true
-    // 设置梁的位置
-    pillarClone.position.z += i * beamZPosition
-    // 每跨梁的标识
-    pillarClone.userData.straddle = i + 1
-    scene.add(pillarClone)
-  }
-  const pillarClone = pillar.clone()
-  pillarClone.is_pillar = true
-  pillarClone.position.z -= beamZPosition
-  scene.add(pillarClone)
-  // 遍历梁片数据生成梁片
-  for (let k = 0; k < productionBuildStore.beamData.data.length; k++) {
-    let beamClone = null
-    if (productionBuildStore.beamData.data[k].y_index === 1) {
-      beamClone = leftBeam.clone()
-    } else if (productionBuildStore.beamData.data[k].y_index === 2) {
-      beamClone = middleBeam1.clone()
-    } else if (productionBuildStore.beamData.data[k].y_index === 3) {
-      beamClone = middleBeam2.clone()
-    } else if (productionBuildStore.beamData.data[k].y_index === 4) {
-      beamClone = middleBeam3.clone()
-    } else if (productionBuildStore.beamData.data[k].y_index === 5) {
-      beamClone = rightBeam.clone()
-    }
-    // 默认为透明材质
-    beamClone.material = transparentMaterial
-    beamClone.position.z += (productionBuildStore.beamData.data[k].x_index - 1) * beamZPosition
-    beamClone.userData = productionBuildStore.beamData.data[k]
-    // 如果已经架设变为不透明
-    if (beamClone.userData.status === 'in_bridge') {
-      beamClone.material = defaultMaterial
-    }
-    scene.add(beamClone)
-  }
-}
-
-// 初始化
-const initThree = async () => {
-  // 场景大小
-  const scenex = 1500
-  const sceney = 360
-  // 通过主进程加载模型和贴图
-  modelUrl = await window.threeApi.getGlbPath('beam.glb')
-  const exr = await window.threeApi.getHdrPath('a.exr')
-  // 自定义方法加载场景
-  ahmThree.ahmLoadGlb(modelUrl).then(({ glb_scene, cameras_array, animations_array }) => {
-    cameras = cameras_array
-    currentCamera = cameras[0]
-    // currentCamera.position.set(valueX.value, valueY.value, valueZ.value)
-
-    // 默认材质
-    defaultMaterial = glb_scene.getObjectByName('中梁').material
-
-    // 默认的东西
-    const test_light = glb_scene.getObjectByName('日光')
-    scene.add(test_light, currentCamera)
-    // scene.add(glb_scene)
-    // 生成桥梁
-    productionBuildStore.getBeamData(() => {
-      generateBridge(glb_scene, scene, productionBuildStore.bridgeData.data[0].count / 5)
-      getMaxDistance()
-    })
-    // changePosition('z', valueZ.value)
-
-    // 创建渲染器
-    renderer = new THREE.WebGLRenderer({ antialias: true })
-    renderer.shadowMap.enabled = true
-    renderer.setSize(scenex, sceney)
-
-    // 加载场景
-    sceneRef.value.appendChild(renderer.domElement)
-
-    // 加载控制器
-    // controls = ahmThree.ahmControls(currentCamera, renderer.domElement)
-
-    // 加载.exr文件并设置为环境贴图
-    // ahmThree.ahmLoadEnv(exr, scene)
-
-    // 添加鼠标点击事件
-    window.addEventListener('click', (event) => {
-      // getRaycaster(event, click1())
-      // 获取场景元素的边界框
-      if (!sceneRef.value) return
-      const rect = sceneRef.value.getBoundingClientRect()
-
-      // 计算鼠标位置相对于场景元素的坐标
-      const x = event.clientX - rect.left
-      const y = event.clientY - rect.top
-      // 将鼠标位置转换为标准化设备坐标
-      mouse.x = (x / scenex) * 2 - 1
-      mouse.y = -(y / sceney) * 2 + 1
-
-      // 更新射线投射器的射线
-      raycaster.setFromCamera(mouse, currentCamera)
-      let intersects = raycaster.intersectObjects(scene.children, true)
-
-      if (intersects.length > 0) {
-        if (!intersects[0].object.is_pillar) {
-          changeAlertPosition(event.clientX, event.clientY)
-          lastObj = currentObj
-          currentObj = intersects[0].object
-          console.log(currentObj, 'currentObj')
-          // 点击下一个让上一个归位,如果点击同一个也归位
-          if (lastObj) {
-            lastObj.position.y = beamHeight
-          }
-          if (lastObj === currentObj && is_show_detail.value) {
-            is_show_detail.value = false
-            return
-          }
-          productionBuildStore.clickObjName(currentObj.userData)
-          gsap.to(currentObj.position, {
-            y: currentObj.position.y + 2,
-            duration: 0.3,
-            ease: 'power1.out'
-          })
-          is_show_detail.value = true
-        }
-      }
-    })
-
-    // 渲染循环
-    function animate() {
-      requestAnimationFrame(animate)
-      // 更新动画混合器 
-      renderer.render(scene, currentCamera)
-      if (controls) controls.update()
-    }
-    animate()
-    // 镜头默认位置
-    changePosition('z', valueZ.value)
-  })
-}
-// 清除场景元素
-const clearScene = () => {
-  while (scene.children.length > 0) {
-    scene.remove(scene.children[0])
-  }
-  sceneRef.value.removeChild(renderer.domElement)
-}
-// 通过材质名字返回梁体
-const getBeamByMaterialName = (obj) => {
-  obj.children.forEach((item, index) => {
-    if (item.material.name !== '钢筋') {
-      console.log(item.material.name, item)
-      return item
-    }
-  })
-  //   return null
-}
 
 onMounted(async () => {
-  // 延迟加载
-  // nextTick(() => {
-  //   initThree()
-  // })
-  setTimeout(() => {
-    initThree()
-  }, 1000)
+  productionBuildStore
+    .getThreejs()
+    .then(({ renderer, scene, camera, controls, raycaster, mouse, beamHeight }) => {
+      sceneRef.value.appendChild(renderer.domElement)
+
+      // 添加鼠标点击事件
+      window.addEventListener('click', (event) => {
+        // getRaycaster(event, click1())
+        // 获取场景元素的边界框
+        if (!sceneRef.value) return
+        const rect = sceneRef.value.getBoundingClientRect()
+
+        // 计算鼠标位置相对于场景元素的坐标
+        const x = event.clientX - rect.left
+        const y = event.clientY - rect.top
+        // 将鼠标位置转换为标准化设备坐标
+        mouse.x = (x / 1500) * 2 - 1
+        mouse.y = -(y / 360) * 2 + 1
+
+        // 更新射线投射器的射线
+        raycaster.setFromCamera(mouse, camera)
+        let intersects = raycaster.intersectObjects(scene.children, true)
+
+        if (intersects.length > 0) {
+          if (!intersects[0].object.is_pillar) {
+            changeAlertPosition(event.clientX, event.clientY)
+            lastObj = currentObj
+            currentObj = intersects[0].object
+            console.log(currentObj, 'currentObj')
+            // 点击下一个让上一个归位,如果点击同一个也归位
+            if (lastObj) {
+              lastObj.position.y = beamHeight
+            }
+            if (lastObj === currentObj && is_show_detail.value) {
+              is_show_detail.value = false
+              return
+            }
+            gsap.to(currentObj.position, {
+              y: currentObj.position.y + 2,
+              duration: 0.3,
+              ease: 'power1.out'
+            })
+            is_show_detail.value = true
+          }
+        }
+      })
+      //   动画循环
+      function animate() {
+        requestAnimationFrame(animate)
+        // 更新动画混合器
+        renderer.render(scene, camera)
+        if (controls) controls.update()
+      }
+      animate()
+      // 镜头默认位置
+      changePosition('z', valueZ.value)
+    })
 })
 
-onBeforeUnmount(() => {
-  while (scene.children.length > 0) {
-    scene.remove(scene.children[0])
-  }
-})
 </script>
 
 <style lang="less" scoped>
