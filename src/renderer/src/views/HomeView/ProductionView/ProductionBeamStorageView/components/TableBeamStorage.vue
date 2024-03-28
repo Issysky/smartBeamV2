@@ -9,24 +9,20 @@
         <div class="title-wrapper">
           <div
             class="title"
-            v-for="(item, index) in productionBuildStore.bridgeColumns"
+            v-for="(item, index) in beamStorageStore.beamStorageColumns"
             :key="index"
           >
             <span> {{ item.name }}</span>
           </div>
         </div>
         <div class="value-wrapper">
-          <div
-            class="value-column"
-            v-for="(item, index) in productionBuildStore.bridgeTableData.data"
-            :key="index"
-          >
+          <div class="value-column" v-for="(item, index) in beamStorageStore.pageData.data" :key="index">
             <p
               class="value"
-              v-for="(valueKey, i) in productionBuildStore.bridgeDataKey"
+              v-for="(valueKey, i) in beamStorageStore.beamStorageDataKey"
               :key="index"
             >
-              {{ valueKey === 'status' ? getBridgeStatus(item[valueKey]) : item[valueKey] }}
+              {{ item[valueKey] }}
             </p>
           </div>
         </div>
@@ -38,7 +34,7 @@
           layout="prev, pager, next"
           v-model:current-page="currentPage"
           @change="getBridgeData('page', currentPage)"
-          :total="productionBuildStore.totalPage * 10"
+          :total="10*beamStorageStore.totalPage"
         />
       </div>
     </div>
@@ -48,39 +44,27 @@
 
 <script setup lang="js">
 import { onMounted, reactive, ref } from 'vue'
-import { useProductionBuildStore } from '@renderer/stores/homeStore/productionStore/production_build'
+import { useProductionBeamStorageStore } from '@renderer/stores/homeStore/productionStore/production_beam_storage'
+
 // 引入store
-const productionBuildStore = useProductionBuildStore()
-// 当前页数
-const currentPage = ref(1)
-// 定义传出的筛选数据
-let params = reactive({
-  page_size: 10
+const beamStorageStore = useProductionBeamStorageStore()
+
+// 定义分页后的图表数据
+const pageData = reactive({
+  data: []
 })
 
-// 获取架设状态
-const getBridgeStatus = (status) => {
-  if (status === 'in_bridge') {
-    return '已架设'
-  } else {
-    return '未架设'
-  }
-}
+// 当前页数
+const currentPage = ref(1)
 
-// 获取页面数据
-const getBridgeData = (type, value) => {
-  // 只有调用分页器的时候需要传入type和value
-  if (type === 'page') {
-    params.page = value
-  } else {
-    currentPage.value = 1
-    params.page = 1
-  }
-  productionBuildStore.getBridgeDataPage(params)
+// 获取分页数据
+const getBridgeData = () => {
+  beamStorageStore.getPageData(currentPage.value)
 }
 
 onMounted(() => {
-  productionBuildStore.getBridgeDataPage(params)
+  // 获取存梁信息数据
+  beamStorageStore.getBeamStorage()
 })
 </script>
 <style scoped lang="less">
@@ -88,7 +72,6 @@ onMounted(() => {
   width: 94%;
   height: 100%;
   padding: 0 3%;
-
   .table-wrapper {
     width: 100%;
     height: 100%;
@@ -170,7 +153,7 @@ onMounted(() => {
       margin-bottom: 20px;
       .title-wrapper {
         width: 100%;
-        height: 15%;
+        height: 40px;
         display: flex;
         background-color: #60626633;
         border-radius: 15px;
@@ -179,7 +162,7 @@ onMounted(() => {
         box-shadow: 5px 5px 10px #00000033;
         .title {
           width: 20%;
-          height: 100%;
+          height: 40px;
           display: flex;
           justify-content: center;
           align-items: center;
@@ -206,7 +189,7 @@ onMounted(() => {
         height: 85%;
         .value-column {
           width: 100%;
-          height: 10%;
+          height: 30px;
           // margin-bottom: .5%;
           display: flex;
           justify-content: center;

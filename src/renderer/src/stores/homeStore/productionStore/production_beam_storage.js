@@ -30,16 +30,26 @@ export const useProductionBeamStorageStore = defineStore('ProductionBeamStorage'
   const beamStorageInfo = reactive({
     data: {}
   })
+  //   表格数据
+  const tableData = reactive({
+    data: []
+  })
+  //   分页后的数据
+  const pageData = reactive({})
+
+  //   总页数
+  const totalPage = ref(0)
 
   //   存梁信息表头
   const beamStorageColumns = [
     { name: '编号', width: '', key: 'id' },
     { name: '存梁场', width: '', key: 'area' },
     { name: '底座名称', width: '', key: 'name' },
-    { name: '所在层', width: '', key: 'status' },
+    { name: '所在层', width: '', key: 'floor' },
     { name: '行序号', width: '', key: 'column' },
     { name: '列序号', width: '', key: 'row' },
     { name: '梁片名称', width: '', key: 'beam_name' },
+    { name: '梁型', width: '', key: 'beam_type' },
     { name: '存梁时间', width: '', key: 'beam_storage_time' }
   ]
 
@@ -48,10 +58,11 @@ export const useProductionBeamStorageStore = defineStore('ProductionBeamStorage'
     'id',
     'area',
     'name',
-    'status',
+    'floor',
     'column',
     'row',
     'beam_name',
+    'beam_type',
     'beam_storage_time'
   ]
   //   请求存梁信息
@@ -63,18 +74,64 @@ export const useProductionBeamStorageStore = defineStore('ProductionBeamStorage'
         }
       })
       beamStorageInfo.data = res.data
-      console.log(beamStorageInfo.data, 'beamStorageInfo.data')
       getTableData()
     } catch (error) {
       console.error(error)
     }
   }
-  //   获取分页数据,给下方图表用
+  //   获取表格数据,给下方图表用
   const getTableData = () => {
     let data = []
+    console.log(beamStorageInfo.data['1#台座']['1'], 'beamStorageInfo.data')
     Object.keys(beamStorageInfo.data).forEach((key) => {
-      console.log(key, beamStorageInfo.data[key])
+      // 处理一层二层数据
+      if (beamStorageInfo.data[key]['1'].beam_name) {
+        let item = {
+          id: beamStorageInfo.data[key]['1'].id,
+          name: key,
+          row: beamStorageInfo.data[key].row,
+          column: beamStorageInfo.data[key].column,
+          area: beamStorageInfo.data[key].area,
+          floor: 1,
+          beam_name: beamStorageInfo.data[key]['1'].beam_name,
+          //   如果存在时间,则拼接时间,不存在返回空
+          beam_storage_time: beamStorageInfo.data[key]['1'].beam_storage_time
+            ? beamStorageInfo.data[key]['1'].beam_storage_time.split('T')[0] +
+              ' ' +
+              ' ' +
+              beamStorageInfo.data[key]['1'].beam_storage_time.split('T')[1]
+            : '',
+          beam_type: beamStorageInfo.data[key]['1'].beam_type
+        }
+        data.push(item)
+      }
+      if (beamStorageInfo.data[key]['2'].beam_name) {
+        let item = {
+          name: key,
+          row: beamStorageInfo.data[key].row,
+          column: beamStorageInfo.data[key].column,
+          area: beamStorageInfo.data[key].area,
+          floor: 2,
+          beam_name: beamStorageInfo.data[key]['2'].beam_name,
+          beam_storage_time: beamStorageInfo.data[key]['2'].beam_storage_time
+            ? beamStorageInfo.data[key]['2'].beam_storage_time.split('T')[0] +
+              ' ' +
+              ' ' +
+              beamStorageInfo.data[key]['2'].beam_storage_time.split('T')[1]
+            : '',
+          beam_type: beamStorageInfo.data[key]['2'].beam_type
+        }
+        data.push(item)
+      }
     })
+    console.log(data, 'tabledata')
+    tableData.data = data
+    getPageData(1)
+  }
+  //   获取分页后的数据
+  const getPageData = (page) => {
+    pageData.data = tableData.data.slice((page - 1) * 4, page * 4)
+    totalPage.value = Math.ceil(tableData.data.length / 4)
   }
 
   //   获取threejs变量
@@ -140,7 +197,14 @@ export const useProductionBeamStorageStore = defineStore('ProductionBeamStorage'
   return {
     getThreejs,
     getBeamStorage,
+    getTableData,
+    getPageData,
     sceneX,
-    sceneY
+    sceneY,
+    beamStorageColumns,
+    beamStorageDataKey,
+    tableData,
+    pageData,
+    totalPage,
   }
 })

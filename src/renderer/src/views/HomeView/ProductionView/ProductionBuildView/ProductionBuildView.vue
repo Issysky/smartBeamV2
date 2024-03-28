@@ -62,7 +62,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   .info-wrapper {
     width: 80%;
     height: 10%;

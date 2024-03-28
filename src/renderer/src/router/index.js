@@ -77,10 +77,20 @@ const router = createRouter({
               name: 'equip__mix_station',
               component: () => import('../views/HomeView/EquipView/EquipMixView/EquipMixView.vue')
             },
+            // 有害气体
             {
               path: 'equip__gas',
               name: 'equip__gas',
               component: () => import('../views/HomeView/EquipView/EquipGasView/EquipGasView.vue')
+            },
+            // 临水临电
+            {
+              path: 'equip__water_electric',
+              name: 'equip__water_electric',
+              component: () =>
+                import(
+                  '../views/HomeView/EquipView/EquipWaterElectricView/EquipWaterElectricView.vue'
+                )
             },
             {
               path: 'locked',
@@ -119,6 +129,14 @@ const router = createRouter({
               path: 'production__beam_storage',
               name: '存梁数据',
               component: productionBeamStorage
+            },
+            {
+              path: 'production__tensioning',
+              name: '张拉数据',
+              component: () =>
+                import(
+                  '../views/HomeView/ProductionView/ProductionTensionView/ProductionTensionView.vue'
+                )
             },
             {
               path: 'locked',

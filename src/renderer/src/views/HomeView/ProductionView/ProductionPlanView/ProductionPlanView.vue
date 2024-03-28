@@ -1,9 +1,7 @@
 <!-- 三级路由梁体计划排程 出现在生产数据二级路由下 -->
 <template>
   <div class="production-plan-wrapper">
-    <div class="top">
-      <LabelType1 :label="'梁体计划排程'" :eng="'Beam Plan'"></LabelType1>
-    </div>
+    <LabelType1 :label="'梁体计划排程'" :eng="'Beam Plan'"></LabelType1>
     <div class="content">
       <!-- 月度计划 -->
       <div class="left">
@@ -65,10 +63,11 @@ onMounted(() => {
 <style scoped lang="less">
 .production-plan-wrapper {
   width: 100%;
-  height: 88%;
-  padding-top: 2%;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   .top {
     width: 100%;
     height: 8%;

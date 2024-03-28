@@ -11,6 +11,7 @@
         <CardTemplate :templateData="{ ...item, index: index }" />
       </div>
     </div>
+    <!-- <AlertType1></AlertType1> -->
   </div>
 </template>
 
@@ -18,6 +19,7 @@
 import { onMounted } from 'vue'
 import LabelType1 from '@renderer/components/LabelType1.vue'
 import CardTemplate from './components/CardTemplate.vue'
+import AlertType1 from '@renderer/components/AlertType1.vue'
 import { useSettingEquipTemplateStore } from '@renderer/stores/homeStore/settingMenuStore/settingEquipTemplate'
 
 const settingEquipTemplateStore = useSettingEquipTemplateStore()
